@@ -27,12 +27,12 @@ int main(void)
 
     int size;
     printf("Enter the no. of integers to be sorted: ");
-    scanf("%u", &size);
+    scanf("%d", &size);
 
     int * arr = (int *) malloc(size * sizeof(int));
     if (arr == NULL)
         exit(EXIT_FAILURE);
-    printf("Enter %u integers: ", size);
+    printf("Enter %d integers: ", size);
     for (int i = 0; i < size; i++)
         scanf("%d", &arr[i]);
 
@@ -99,7 +99,7 @@ int partition(int * arr, int lowerIndex, int upperIndex)
     {
         // If the condition is arr[i] < arr[lowerIndex]
         // (instead of <=), then it will always fail, since
-        // the pivot is arr[lowerIndex].
+        // arr[lowerIndex] acts as the pivot.
 
         while ((i < upperIndex) &&
                (arr[i] <= arr[lowerIndex]))
@@ -109,14 +109,14 @@ int partition(int * arr, int lowerIndex, int upperIndex)
                (arr[j] >= arr[lowerIndex]))
             j--;
 
-        // Automatically means that i <= upperIndex and
-        // j >= lowerIndex.
+        // At this point, it is ensured that i <= upperIndex
+        // and j >= lowerIndex.
         if (i < j)
             temp = arr[i], arr[i] = arr[j], arr[j] = temp;
     }
 
-    // At this point, lowerIndex <= j <= upperIndex is
-    // ensured.
+    // At this point, it is ensured that
+    // lowerIndex <= j <= upperIndex.
     temp = arr[lowerIndex];
     arr[lowerIndex] = arr[j];
     arr[j] = temp;
