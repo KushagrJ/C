@@ -15,7 +15,7 @@ int main(void)
 
     int arr[size];
 
-    printf("Enter %d integers: ", size);
+    printf("Enter %u integers: ", size);
     for (unsigned i = 0; i < size; i++)
         scanf("%d", &arr[i]);
 
