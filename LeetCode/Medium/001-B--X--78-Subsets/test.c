@@ -10,8 +10,8 @@
 
 
 int ** subsets(int *, int, int *, int **);
-void generateSubsets(int *, int, int **, int **, int *,
-                     int *, int, int);
+void generate_subsets(int *, int, int **, int **, int *,
+                      int *, int, int);
 
 
 int main(void)
@@ -68,19 +68,19 @@ int ** subsets(int * arr, int arrSize,
 
     int currentSubsetIndex = 0;
 
-    generateSubsets(arr, arrSize, ptr_sizesOfSubsets,
-                    subs, &currentSubsetIndex,
-                    NULL, 0, 0);
+    generate_subsets(arr, arrSize, ptr_sizesOfSubsets,
+                     subs, &currentSubsetIndex,
+                     NULL, 0, 0);
 
     return subs;
 
 }
 
 
-void generateSubsets(int * arr, int arrSize,
-                     int ** ptr_sizesOfSubsets, int ** subs,
-                     int * ptr_currentSubsetIndex,
-                     int * currentSubset,
+void generate_subsets(int * arr, int arrSize,
+                      int ** ptr_sizesOfSubsets, int ** subs,
+                      int * ptr_currentSubsetIndex,
+                      int * currentSubset,
                      int currentSubsetSize, int arrIndex)
 {
 
@@ -111,7 +111,7 @@ void generateSubsets(int * arr, int arrSize,
     {
         // Case 1: Excluding arr[arrIndex]
 
-        generateSubsets(arr, arrSize, ptr_sizesOfSubsets,
+        generate_subsets(arr, arrSize, ptr_sizesOfSubsets,
                         subs, ptr_currentSubsetIndex,
                         currentSubset, currentSubsetSize,
                         arrIndex + 1);
@@ -134,7 +134,7 @@ void generateSubsets(int * arr, int arrSize,
 
         newSubset[newSubsetSize - 1] = arr[arrIndex];
 
-        generateSubsets(arr, arrSize, ptr_sizesOfSubsets,
+        generate_subsets(arr, arrSize, ptr_sizesOfSubsets,
                         subs, ptr_currentSubsetIndex,
                         newSubset, newSubsetSize,
                         arrIndex + 1);
