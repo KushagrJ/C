@@ -81,7 +81,7 @@ void generate_subsets(int * arr, int arrSize,
                       int ** ptr_sizesOfSubsets, int ** subs,
                       int * ptr_currentSubsetIndex,
                       int * currentSubset,
-                     int currentSubsetSize, int arrIndex)
+                      int currentSubsetSize, int arrIndex)
 {
 
     if (arrIndex == arrSize)
