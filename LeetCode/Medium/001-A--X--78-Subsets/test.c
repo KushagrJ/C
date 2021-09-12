@@ -12,7 +12,7 @@ int main(void)
 {
 
     int arr[] = {1,2,3,4,5};
-    int arrSize = sizeof(arr) / sizeof(arr[0]);
+    int arrSize = sizeof arr / sizeof arr[0];
     int numberOfSubsets;
     int * sizesOfSubsets;
 
@@ -22,7 +22,9 @@ int main(void)
     for (int i = 0; i < numberOfSubsets; i++)
     {
         if (sizesOfSubsets[i] == 0)
+        {
             printf("[]\n");
+        }
 
         else
         {
@@ -52,14 +54,14 @@ int ** subsets(int * arr, int arrSize,
     // Same as *ptr_numberOfSubsets = pow(2, arrSize);
 
     *ptr_sizesOfSubsets = (int *)
-        malloc(*ptr_numberOfSubsets*sizeof(int));
+        malloc(*ptr_numberOfSubsets * sizeof (int));
     if (*ptr_sizesOfSubsets == NULL)
         exit(EXIT_FAILURE);
 
     (*ptr_sizesOfSubsets)[0] = 0; // First subset is phi.
 
     int ** subs = (int **)
-        malloc(*ptr_numberOfSubsets*sizeof(int *));
+        malloc(*ptr_numberOfSubsets * sizeof (int *));
     if (subs == NULL)
         exit(EXIT_FAILURE);
 
@@ -67,22 +69,28 @@ int ** subsets(int * arr, int arrSize,
     // malloc(0); is implementation-defined.
 
     for (int i = 0, k = 1; i < arrSize; i++)
+    {
         for (int j = 0; j < (1 << i); j++, k++)
         {
             (*ptr_sizesOfSubsets)[k] =
                 (*ptr_sizesOfSubsets)[j] + 1;
 
             subs[k] = (int *)
-                malloc((*ptr_sizesOfSubsets)[k]*sizeof(int));
+                malloc((*ptr_sizesOfSubsets)[k] *
+                           sizeof (int));
             if (subs[k] == NULL)
                 exit(EXIT_FAILURE);
 
             if (j > 0)
+            {
                 memcpy(subs[k], subs[j],
-                       (*ptr_sizesOfSubsets)[j]*sizeof(int));
+                       (*ptr_sizesOfSubsets)[j] *
+                           sizeof (int));
+            }
 
             subs[k][(*ptr_sizesOfSubsets)[k] - 1] = arr[i];
         }
+    }
 
     return subs;
 

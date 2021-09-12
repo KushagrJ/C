@@ -1,6 +1,6 @@
 // The array must contain unique elements.
 
-// The number of arguments to generateSubsets() can be
+// The number of arguments to generate_subsets() can be
 // reduced by declaring arr, arrSize, numberOfSubsets,
 // sizesOfSubsets, subs and currentSubsetIndex as global.
 
@@ -18,7 +18,7 @@ int main(void)
 {
 
     int arr[] = {1,2,3,4,5};
-    int arrSize = sizeof(arr) / sizeof(arr[0]);
+    int arrSize = sizeof arr / sizeof arr[0];
     int numberOfSubsets;
     int * sizesOfSubsets;
 
@@ -28,7 +28,9 @@ int main(void)
     for (int i = 0; i < numberOfSubsets; i++)
     {
         if (sizesOfSubsets[i] == 0)
+        {
             printf("[]\n");
+        }
 
         else
         {
@@ -57,12 +59,12 @@ int ** subsets(int * arr, int arrSize,
     *ptr_numberOfSubsets = (1 << arrSize);
 
     *ptr_sizesOfSubsets = (int *)
-        malloc(*ptr_numberOfSubsets * sizeof(int));
+        malloc(*ptr_numberOfSubsets * sizeof (int));
     if (*ptr_sizesOfSubsets == NULL)
         exit(EXIT_FAILURE);
 
     int ** subs = (int **)
-        malloc(*ptr_numberOfSubsets * sizeof(int *));
+        malloc(*ptr_numberOfSubsets * sizeof (int *));
     if (subs == NULL)
         exit(EXIT_FAILURE);
 
@@ -89,17 +91,19 @@ void generate_subsets(int * arr, int arrSize,
         if (currentSubsetSize)
         {
             subs[*ptr_currentSubsetIndex] = (int *)
-                malloc(currentSubsetSize * sizeof(int));
+                malloc(currentSubsetSize * sizeof (int));
             if (subs[*ptr_currentSubsetIndex] == NULL)
                 exit(EXIT_FAILURE);
 
             memcpy(subs[*ptr_currentSubsetIndex],
                    currentSubset,
-                   currentSubsetSize * sizeof(int));
+                   currentSubsetSize * sizeof (int));
         }
 
         else
+        {
             subs[*ptr_currentSubsetIndex] = NULL;
+        }
 
         (*ptr_sizesOfSubsets)[*ptr_currentSubsetIndex] =
             currentSubsetSize;
@@ -112,9 +116,9 @@ void generate_subsets(int * arr, int arrSize,
         // Case 1: Excluding arr[arrIndex]
 
         generate_subsets(arr, arrSize, ptr_sizesOfSubsets,
-                        subs, ptr_currentSubsetIndex,
-                        currentSubset, currentSubsetSize,
-                        arrIndex + 1);
+                         subs, ptr_currentSubsetIndex,
+                         currentSubset, currentSubsetSize,
+                         arrIndex + 1);
 
 
         // Case 2: Including arr[arrIndex]
@@ -124,20 +128,22 @@ void generate_subsets(int * arr, int arrSize,
         // Checking for newSubsetSize > 0 is redundant, since
         // newSubsetSize will always be greater than zero.
         int * newSubset = (int *)
-            malloc(newSubsetSize * sizeof(int));
+            malloc(newSubsetSize * sizeof (int));
         if (newSubset == NULL)
             exit(EXIT_FAILURE);
 
         if (currentSubsetSize)
+        {
             memcpy(newSubset, currentSubset,
-                   currentSubsetSize * sizeof(int));
+                   currentSubsetSize * sizeof (int));
+        }
 
         newSubset[newSubsetSize - 1] = arr[arrIndex];
 
         generate_subsets(arr, arrSize, ptr_sizesOfSubsets,
-                        subs, ptr_currentSubsetIndex,
-                        newSubset, newSubsetSize,
-                        arrIndex + 1);
+                         subs, ptr_currentSubsetIndex,
+                         newSubset, newSubsetSize,
+                         arrIndex + 1);
 
         free(newSubset);
     }
