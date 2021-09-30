@@ -31,6 +31,8 @@ int main(void)
     for (unsigned i = 0; i < size; i++)
     {
         current = (Node *) malloc(sizeof (Node));
+        if (current == NULL)
+            exit(EXIT_FAILURE);
 
         if (head == NULL)
             head = current;
@@ -100,13 +102,15 @@ void bubble_sort_linked_list(Node ** ptr_head)
         {
             if (current->x > next->x)
             {
-                if (previous == NULL)
-                    *ptr_head = next;
+                if (previous == NULL) // i.e. 0th & 1st nodes
+                    *ptr_head = next; // are to be swapped.
                 else
                     previous->next = next;
                 current->next = next->next;
                 next->next = current;
 
+                // To swap the addresses stored in current
+                // and next.
                 current = next;
                 next = next->next;
             }

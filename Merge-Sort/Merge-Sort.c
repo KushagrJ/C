@@ -183,3 +183,65 @@ void merge(int * arr, int * left, int * right,
 }
 
 */
+
+
+
+
+
+/* Algorithm :-
+
+   // Argument 1: Array into which the two sorted arrays are
+   //             to be merged, arr.
+   // Argument 2: First sorted array, left.
+   // Argument 3: Second sorted array, right.
+   // Argument 4: Size of the first sorted array, leftSize.
+   // Argument 5: Size of the second sorted array, rightSize.
+   // Ensure that arrSize is equal to (leftSize + rightSize).
+
+   merge() -
+
+   1. Take 3 counters, i, j and k, for arr, left and right.
+   2. Initialize i, j and k to 0.
+   3. While (j is less than leftSize) and (k is less than
+      rightSize)
+          If (left[j] is less than or equal to right[k])
+              Set arr[i] equal to left[j].
+              Increment i by 1.
+              Increment j by 1.
+          Else
+              Set arr[i] equal to right[k].
+              Increment i by 1.
+              Increment k by 1.
+      While (j is less than leftSize)
+          Set arr[i] equal to left[j].
+          Increment i by 1.
+          Increment j by 1.
+      While (k is less than rightSize)
+          Set arr[i] equal to right[k].
+          Increment i by 1.
+          Increment k by 1.
+
+
+
+   // Argument 1: Array to be sorted, arr.
+   // Argument 2: Size of the array, arrSize.
+
+   merge_sort() -
+
+   1. If (arrSize is equal to 1)
+          Do nothing, as arr is already sorted.
+      Else If (arrSize is greater than 1)
+          Create two sub-arrays left and right such that
+          leftSize is equal to (arrSize / 2) and rightSize is
+          equal to (arrSize - leftSize).
+          Sort left using merge_sort().
+          Sort right using merge_sort().
+          Merge left and right into arr using merge().
+
+
+
+   main() -
+
+   Sort any array using merge_sort().
+
+*/
