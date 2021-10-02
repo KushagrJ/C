@@ -68,19 +68,18 @@ void quick_sort(int * arr, int lowerIndex, int upperIndex)
 }
 
 
-// Hoare's partitioning scheme fails for pivots other than
-// arr[lowerIndex].
-// The most apparent failure can be seen for an already
-// sorted 2-element array with the pivot as arr[upperIndex].
+// arr[upperIndex] should not be chosen as the pivot with
+// Hoare's partitioning scheme, as this scheme fails for a
+// 2-element array with arr[upperIndex] as the pivot.
 
 int partition(int * arr, int lowerIndex, int upperIndex)
 {
 
     int temp;
 
-    // The chosen pivot is swapped with the first element, as
-    // Hoare's scheme wouldn't work otherwise.
-    // The function now works on arr[lowerIndex] instead of
+    // The chosen pivot is swapped with the first element to
+    // ensure that Hoare's scheme works.
+    // This function now works on arr[lowerIndex] instead of
     // arr[pivotIndex].
 
     int pivotIndex =
