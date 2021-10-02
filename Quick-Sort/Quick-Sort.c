@@ -102,17 +102,25 @@ int partition(int * arr, int lowerIndex, int upperIndex)
         // arr[lowerIndex] acts as the pivot.
 
         while ((i < upperIndex) &&
-               (arr[i] <= arr[lowerIndex]))
+                   (arr[i] <= arr[lowerIndex]))
+        {
             i++;
+        }
 
         while ((j > lowerIndex) &&
-               (arr[j] >= arr[lowerIndex]))
+                   (arr[j] >= arr[lowerIndex]))
+        {
             j--;
+        }
 
         // At this point, it is ensured that i <= upperIndex
         // and j >= lowerIndex.
         if (i < j)
-            temp = arr[i], arr[i] = arr[j], arr[j] = temp;
+        {
+            temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
     }
 
     // At this point, it is ensured that
