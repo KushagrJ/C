@@ -1,3 +1,15 @@
+// To understand the recursion, first assume that arr is a
+// very large array. Now, prove that the quick_sort()
+// function sorts any random 1-element subset of arr. Then,
+// prove that it sorts any random 2-element subset of arr.
+// Continuing in this manner, you will notice that it sorts
+// any random n-element subset of arr.
+// For eg., when proving that the function sorts any random
+// 5-element subset of arr, you don't have to prove that it
+// sorts the two smaller subsets obtained after the pivot has
+// been sorted, as you have already proved that it sorts any
+// random subset of arr with less than 5 elements.
+
 // This implementation uses Hoare's partitioning scheme.
 // Study Lomuto's partitioning scheme as well.
 

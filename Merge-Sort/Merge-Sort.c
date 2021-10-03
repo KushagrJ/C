@@ -1,7 +1,18 @@
+// To understand the recursion, first prove that the
+// merge_sort() function sorts any random 1-element array.
+// Then, prove that it sorts any random 2-element array.
+// Continuing in this manner, you will notice that it sorts
+// any random n-element array.
+// For eg., when proving that the function sorts any random
+// 5-element array, you don't have to prove that it sorts its
+// left and right halves, as you have already proved that it
+// sorts any random array with less than 5 elements.
+
 // Study another implementation of Merge Sort where the left
 // & right arays are created inside the merge() function, and
 // the merging process gets done using a single loop, by
-// setting the extra last elements of left & right to INT_MAX
+// setting the extra last elements of left & right to
+// INT_MAX.
 
 #include <stdio.h>
 #include <stdlib.h>
