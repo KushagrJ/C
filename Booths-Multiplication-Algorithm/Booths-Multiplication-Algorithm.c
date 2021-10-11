@@ -165,7 +165,7 @@ int main(void)
     printf("\n\n\nProduct = ");
     for (int i = 0; i < 2*N; i++)
         printf("%d", product[i]);
-    printf(" = %d\n",
+    printf(" = %+d\n",
           convert_2N_bit_binary_integer_to_decimal(product));
 
     return 0;
