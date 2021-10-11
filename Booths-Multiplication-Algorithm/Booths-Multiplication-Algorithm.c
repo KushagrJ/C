@@ -2,7 +2,7 @@
 #include <string.h>
 
 
-#define N 14
+#define N 8
 
 
 const int LOWER_LIMIT = -(1 << (N-1));
@@ -207,8 +207,7 @@ void find_twos_complement_in_N_bits(_Bool* original,
     for (int i = 0; i < N; i++)
         result[i] = (_Bool) (1 - original[i]);
 
-    _Bool one[N] = { (_Bool) 0 };
-    one[N-1] = (_Bool) 1;
+    _Bool one[N] = { [N-1] = (_Bool) 1 };
 
     add_two_N_bit_binary_integers(result, one, result);
 
