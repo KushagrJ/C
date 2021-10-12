@@ -2,7 +2,7 @@
 #include <string.h>
 
 
-#define N 8
+#define N 10
 
 
 const int LOWER_LIMIT = -(1 << (N-1));
