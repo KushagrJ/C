@@ -2,7 +2,7 @@
 #include <string.h>
 
 
-#define N 8
+#define N 16
 
 
 const int LOWER_LIMIT = -(1 << (N-1));
@@ -20,21 +20,19 @@ int main(void)
 
     int temp;
 
-    printf("Enter Multiplicand & Multiplier (%+d to %+d): ",
-           LOWER_LIMIT, UPPER_LIMIT);
+    printf("Enter Multiplicand & Multiplier (%+d to %+d): ", LOWER_LIMIT,
+           UPPER_LIMIT);
 
     _Bool multiplicand[N];
     scanf("%d", &temp);
-    convert_decimal_integer_to_N_bit_binary(temp,
-                                            multiplicand);
+    convert_decimal_integer_to_N_bit_binary(temp, multiplicand);
     printf("\nMultiplicand, M = %d = ", temp);
     for (int i = 0; i < N; i++)
         printf("%d", (int) multiplicand[i]);
     printf("\n");
 
     _Bool negative_of_multiplicand[N];
-    find_twos_complement_in_N_bits(multiplicand,
-                                   negative_of_multiplicand);
+    find_twos_complement_in_N_bits(multiplicand, negative_of_multiplicand);
     printf("-M = 2's complement of M = ");
     for (int i = 0; i < N; i++)
         printf("%d", (int) negative_of_multiplicand[i]);
@@ -42,8 +40,7 @@ int main(void)
 
     _Bool product[(2*N)+1] = { (_Bool) 0 };
     scanf("%d", &temp);
-    convert_decimal_integer_to_N_bit_binary(temp,
-                                            product + N);
+    convert_decimal_integer_to_N_bit_binary(temp, product + N);
     printf("Multiplier, Q = %d = ", temp);
     for (int i = 0; i < N; i++)
         printf("%d", (int) product[i+N]);
@@ -55,8 +52,7 @@ int main(void)
     printf("Sequence Counter, SC = %d\n\n\n\n", N);
 
 
-    printf("  %*cA%*cQ%*cSC\n\n\n", N-1, ' ', 2*(N+1), ' ',
-           N+3, ' ');
+    printf("  %*cA%*cQ%*cSC\n\n\n", N-1, ' ', 2*(N+1), ' ', N+3, ' ');
 
     printf("  ");
     for (int i = 0; i < N; i++)
@@ -88,9 +84,7 @@ int main(void)
                 printf("-");
             putchar('\n');
 
-            add_two_N_bit_binary_integers(product,
-                                          multiplicand,
-                                          product);
+            add_two_N_bit_binary_integers(product, multiplicand, product);
 
             printf("  ");
             for (int i = 0; i < N; i++)
@@ -107,7 +101,7 @@ int main(void)
         }
 
 
-        else if (product[(2*N)-1] == 1 && product[2*N] == 0)
+        else if ((product[(2*N)-1] == 1) && (product[2*N] == 0))
         {
             printf("\n\n  A = A + (-M),\n\n");
 
@@ -118,8 +112,7 @@ int main(void)
 
             printf("+ ");
             for (int i = 0; i < N; i++)
-                printf("%d ",
-                       (int) negative_of_multiplicand[i]);
+                printf("%d ", (int) negative_of_multiplicand[i]);
             putchar('\n');
 
             printf("  ");
@@ -127,9 +120,8 @@ int main(void)
                 printf("-");
             putchar('\n');
 
-            add_two_N_bit_binary_integers(product,
-                                    negative_of_multiplicand,
-                                    product);
+            add_two_N_bit_binary_integers(product, negative_of_multiplicand,
+                                          product);
 
             printf("  ");
             for (int i = 0; i < N; i++)
@@ -148,7 +140,7 @@ int main(void)
 
         printf("\n\n  Arithmetic right shift,\n\n");
 
-        memmove(product + 1, product, 2*N * sizeof (_Bool));
+        memmove(product + 1, product, 2 * N * sizeof (_Bool));
 
         printf("  ");
         for (int i = 0; i < N; i++)
@@ -165,16 +157,14 @@ int main(void)
     printf("\n\n\nProduct = ");
     for (int i = 0; i < 2*N; i++)
         printf("%d", product[i]);
-    printf(" = %+d\n",
-          convert_2N_bit_binary_integer_to_decimal(product));
+    printf(" = %+d\n", convert_2N_bit_binary_integer_to_decimal(product));
 
     return 0;
 
 }
 
 
-void convert_decimal_integer_to_N_bit_binary(int decimal,
-                                             _Bool* binary)
+void convert_decimal_integer_to_N_bit_binary(int decimal, _Bool* binary)
 {
 
     int temp;
@@ -200,8 +190,7 @@ void convert_decimal_integer_to_N_bit_binary(int decimal,
 }
 
 
-void find_twos_complement_in_N_bits(_Bool* original,
-                                    _Bool* result)
+void find_twos_complement_in_N_bits(_Bool* original, _Bool* result)
 {
 
     for (int i = 0; i < N; i++)
@@ -214,8 +203,7 @@ void find_twos_complement_in_N_bits(_Bool* original,
 }
 
 
-void add_two_N_bit_binary_integers(_Bool* num1, _Bool* num2,
-                                   _Bool* sum)
+void add_two_N_bit_binary_integers(_Bool* num1, _Bool* num2, _Bool* sum)
 {
 
     int a, b;
