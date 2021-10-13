@@ -5,10 +5,6 @@
 #define N 16
 
 
-const int LOWER_LIMIT = -(1 << (N-1));
-const int UPPER_LIMIT = +(1 << (N-1)) - 1;
-
-
 void convert_decimal_integer_to_N_bit_binary(int, _Bool*);
 void find_twos_complement_in_N_bits(_Bool*, _Bool*);
 void add_two_N_bit_binary_integers(_Bool*, _Bool*, _Bool*);
