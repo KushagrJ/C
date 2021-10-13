@@ -20,8 +20,8 @@ int main(void)
 
     int temp;
 
-    printf("Enter Multiplicand & Multiplier (%+d to %+d): ", LOWER_LIMIT,
-           UPPER_LIMIT);
+    printf("Enter Multiplicand & Multiplier (%+d to %+d): ",
+           -(1 << (N-1)) + 1, (1 << (N-1)) - 1);
 
     _Bool multiplicand[N];
     scanf("%d", &temp);
