@@ -2,6 +2,8 @@
 #include <string.h>
 
 
+// Largest possible value of N is 16 for a 4-byte int, since for N = 17 and
+// higher, (1 << ((2*N)-1)) will be out of range.
 #define N 16
 
 
