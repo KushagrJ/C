@@ -5,6 +5,9 @@
 #define N 16
 
 
+int const TWO_POWER_N_MINUS_ONE = (1 << (N-1));
+
+
 void convert_decimal_integer_to_N_bit_binary(int, _Bool*);
 void find_twos_complement_in_N_bits(_Bool*, _Bool*);
 void add_two_N_bit_binary_integers(_Bool*, _Bool*, _Bool*);
@@ -16,13 +19,13 @@ int main(void)
 
     int temp;
 
-    printf("Enter Multiplicand & Multiplier (%+d to %+d): ",
-           -(1 << (N-1)) + 1, (1 << (N-1)) - 1);
+    printf("Enter the multiplicand (%+d to %+d): ",
+           -(TWO_POWER_N_MINUS_ONE) + 1, (TWO_POWER_N_MINUS_ONE) - 1);
 
     _Bool multiplicand[N];
     scanf("%d", &temp);
     convert_decimal_integer_to_N_bit_binary(temp, multiplicand);
-    printf("\nMultiplicand, M = %d = ", temp);
+    printf("Multiplicand, M = %d = ", temp);
     for (int i = 0; i < N; i++)
         printf("%d", (int) multiplicand[i]);
     printf("\n");
@@ -34,6 +37,9 @@ int main(void)
         printf("%d", (int) negative_of_multiplicand[i]);
     printf("\n");
 
+    printf("\nEnter the multiplier (%+d to %+d): ",
+           -(TWO_POWER_N_MINUS_ONE), (TWO_POWER_N_MINUS_ONE) - 1);
+
     _Bool product[(2*N)+1] = { (_Bool) 0 };
     scanf("%d", &temp);
     convert_decimal_integer_to_N_bit_binary(temp, product + N);
@@ -42,7 +48,7 @@ int main(void)
         printf("%d", (int) product[i+N]);
     printf("\n");
 
-    printf("Accumulator, A = 0 = %0*d\n", N, 0);
+    printf("\nAccumulator, A = 0 = %0*d\n", N, 0);
 
     int sequence_counter = N;
     printf("Sequence Counter, SC = %d\n\n\n\n", N);
