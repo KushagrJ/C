@@ -7,7 +7,7 @@
 #define N 16
 
 
-int const TWO_POWER_N_MINUS_ONE = (1 << (N-1));
+const int TWO_POWER_N_MINUS_ONE = (1 << (N-1));
 
 
 void convert_decimal_integer_to_N_bit_binary(int, _Bool*);
@@ -69,7 +69,7 @@ int main(void)
 
     while (sequence_counter >= 0)
     {
-        if (product[(2*N)-1] == 0 && product[2*N] == 1)
+        if ((product[(2*N)-1] == 0) && (product[2*N] == 1))
         {
             printf("\n\n  A = A + M,\n\n");
 
@@ -182,7 +182,7 @@ void convert_decimal_integer_to_N_bit_binary(int decimal, _Bool* binary)
     else
     {
         binary[0] = (_Bool) 1;
-        temp = decimal + (1 << ((2*N)-1));
+        temp = decimal + (1 << (N-1));
     }
 
     for (int i = N-1; i > 0; i--)
