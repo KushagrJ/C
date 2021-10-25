@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 #include <stdio.h>
 #include <string.h>
 
@@ -254,3 +261,4 @@ int convert_2N_bit_binary_integer_to_decimal(_Bool* binary)
         return decimal - (1 << ((2*N)-1));
 
 }
+
