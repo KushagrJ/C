@@ -5,14 +5,14 @@
 struct node
 {
     int x;
-    struct node * next;
+    struct node* next;
 };
 
 typedef struct node Node;
 
 
 // Stable sort.
-void bubble_sort_linked_list(Node **);
+void bubble_sort_linked_list(Node**);
 
 
 int main(void)
@@ -22,15 +22,15 @@ int main(void)
     printf("Enter the number of integers: ");
     scanf("%u", &size);
 
-    Node * head = NULL;
-    Node * current;
-    Node * previous;
+    Node* head = NULL;
+    Node* current;
+    Node* previous;
 
     printf("Enter %u integers: ", size);
 
     for (unsigned i = 0; i < size; i++)
     {
-        current = (Node *) malloc(sizeof (Node));
+        current = (Node*) malloc(sizeof (Node));
         if (current == NULL)
             exit(EXIT_FAILURE);
 
@@ -58,7 +58,7 @@ int main(void)
 
     while (head)
     {
-        Node * next = head->next;
+        Node* next = head->next;
         free(head);
         head = next;
     }
@@ -86,11 +86,11 @@ void bubble_sort_linked_list(Node ** ptr_head)
 
     */
 
-    Node * current;
-    Node * previous;
-    Node * next;
+    Node* current;
+    Node* previous;
+    Node* next;
 
-    Node * end_of_current_iteration = NULL;
+    Node* end_of_current_iteration = NULL;
 
     while (end_of_current_iteration != (*ptr_head)->next)
     {
