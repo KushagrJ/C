@@ -68,7 +68,7 @@ int main(void)
 }
 
 
-void bubble_sort_linked_list(Node ** ptr_head)
+void bubble_sort_linked_list(Node** ptr_head)
 {
 
     /*
