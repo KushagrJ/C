@@ -49,7 +49,7 @@ void bubble_sort(int * arr, unsigned size)
     for (unsigned i = 1; i < size; i++)
         for (unsigned j = 0; j < size-i; j++)
             if (arr[j] > arr[j+1])
-                temp=arr[j], arr[j]=arr[j+1], arr[j+1]=temp;
+                temp = arr[j], arr[j] = arr[j+1], arr[j+1] = temp;
 }
 
 

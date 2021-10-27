@@ -79,9 +79,9 @@ void bubble_sort_linked_list(Node** ptr_head)
     for (int i = 1; i < size; i++)
         for (int j = 0; j < size-i; j++)
             if (arr[j] > arr[j+1])
-                temp=arr[j], arr[j]=arr[j+1], arr[j+1]=temp;
+                temp = arr[j], arr[j] = arr[j+1], arr[j+1] = temp;
 
-    In this function, current and next correspond to
+    In this bubble_sort_linked_list() function, current and next correspond to
     arr[j] and arr[j+1], respectively.
 
     */
@@ -102,15 +102,14 @@ void bubble_sort_linked_list(Node** ptr_head)
         {
             if (current->x > next->x)
             {
-                if (previous == NULL) // i.e. 0th & 1st nodes
-                    *ptr_head = next; // are to be swapped.
+                if (previous == NULL) // i.e. 0th & 1st nodes are to be swapped.
+                    *ptr_head = next;
                 else
                     previous->next = next;
                 current->next = next->next;
                 next->next = current;
 
-                // To swap the addresses stored in current
-                // and next.
+                // Same as temp = current, current = next, next = temp;
                 current = next;
                 next = next->next;
             }
