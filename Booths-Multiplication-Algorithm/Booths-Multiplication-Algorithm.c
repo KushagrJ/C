@@ -186,7 +186,7 @@ void convert_decimal_integer_to_N_bit_binary(int decimal, _Bool* binary)
 
     for (int i = N-1; i > 0; i--)
     {
-        binary[i] = temp % 2;
+        binary[i] = (_Bool) (temp % 2);
         temp /= 2;
     }
 
@@ -197,7 +197,7 @@ void find_twos_complement_in_N_bits(_Bool* original, _Bool* result)
 {
 
     for (int i = 0; i < N; i++)
-        result[i] = (_Bool) (1 - original[i]);
+        result[i] = (_Bool) (1 - (int) original[i]);
 
     _Bool one[N] = { [N-1] = (_Bool) 1 };
 
@@ -246,7 +246,7 @@ int convert_2N_bit_binary_integer_to_decimal(_Bool* binary)
     int decimal = 0;
 
     for (int i = (2*N)-1; i > 0; i--)
-        decimal += (1 << ((2*N) - i - 1)) * (int) binary[i];
+        decimal += (1 << ((2*N) - i - 1)) * ((int) binary[i]);
 
     if (binary[0] == (_Bool) 0)
         return decimal;
