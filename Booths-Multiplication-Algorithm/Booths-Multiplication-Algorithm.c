@@ -2,12 +2,13 @@
 #include <string.h>
 
 
-// Largest possible value of N is 16 for a 4-byte int, since for N = 17 and
-// higher, (1 << ((2*N)-1)) will be out of range.
-#define N 16
+// Largest possible value of N is 15 for a 4-byte int, since for N = 16 and
+// higher, (1 << ((2*N)-1)) will be out of range for a signed int.
+#define N 8
 
 
-const int TWO_POWER_N_MINUS_ONE = (1 << (N-1));
+const int TWO_POWER_N_MINUS_ONE = 1 << (N-1);
+const int TWO_POWER_2N_MINUS_ONE = 1 << ((2*N)-1);
 
 
 void convert_decimal_integer_to_N_bit_binary(int, _Bool*);
@@ -181,7 +182,7 @@ void convert_decimal_integer_to_N_bit_binary(int decimal, _Bool* binary)
     else
     {
         binary[0] = (_Bool) 1;
-        temp = decimal + (1 << (N-1));
+        temp = decimal + TWO_POWER_N_MINUS_ONE;
     }
 
     for (int i = N-1; i > 0; i--)
@@ -251,6 +252,6 @@ int convert_2N_bit_binary_integer_to_decimal(_Bool* binary)
     if (binary[0] == (_Bool) 0)
         return decimal;
     else
-        return decimal - (1 << ((2*N)-1));
+        return decimal - TWO_POWER_2N_MINUS_ONE;
 
 }
