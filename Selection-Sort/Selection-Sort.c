@@ -3,7 +3,7 @@
 
 
 // Unstable sort.
-void selection_sort(int *, unsigned);
+void selection_sort(int*, unsigned);
 
 
 int main(void)
@@ -13,7 +13,7 @@ int main(void)
     printf("Enter the no. of integers to be sorted: ");
     scanf("%u", &size);
 
-    int * arr = (int *) malloc(size * sizeof(int));
+    int* arr = (int*) malloc(size * sizeof(int));
     if (arr == NULL)
         exit(EXIT_FAILURE);
     printf("Enter %u integers: ", size);
@@ -34,7 +34,7 @@ int main(void)
 }
 
 
-void selection_sort(int * arr, unsigned size)
+void selection_sort(int* arr, unsigned size)
 {
 
     int temp;

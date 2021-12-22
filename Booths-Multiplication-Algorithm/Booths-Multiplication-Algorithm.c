@@ -4,7 +4,7 @@
 
 // Largest possible value of N is 15 for a 4-byte int, since for N = 16 and
 // higher, (1 << ((2*N)-1)) will be out of range for a signed int.
-#define N 8
+#define N 15
 
 
 const int TWO_POWER_N_MINUS_ONE = 1 << (N-1);
