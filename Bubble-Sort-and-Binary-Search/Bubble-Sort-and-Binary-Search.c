@@ -1,10 +1,10 @@
-// Add a flag in bubble_sort() to make its best case time complexity O(n).
-
 #include <stdio.h>
+#include <stdbool.h>
 
 
 // Stable sort.
 void bubble_sort(int *, unsigned);
+
 int binary_search(int *, unsigned, int);
 
 
@@ -35,10 +35,15 @@ int main(void)
     int indexOfTarget = binary_search(arr, size, target);
 
     if (indexOfTarget == -1)
+    {
         printf("Integer not found!\n");
+    }
+
     else
+    {
         printf("Integer found at position no. %d "
                "in the sorted list\n", indexOfTarget + 1);
+    }
 
     return 0;
 
@@ -47,11 +52,29 @@ int main(void)
 
 void bubble_sort(int * arr, unsigned size)
 {
+
     int temp;
+
+    // To make the best case time complexity equal to O(n).
+    bool array_is_already_sorted = true;
+
     for (unsigned i = 1; i < size; i++)
-        for (unsigned j = 0; j < size-i; j++)
+    {
+        for (unsigned j = 0; j < size - i; j++)
+        {
             if (arr[j] > arr[j+1])
-                temp = arr[j], arr[j] = arr[j+1], arr[j+1] = temp;
+            {
+                array_is_already_sorted = false;
+                temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+
+        if (array_is_already_sorted)
+            break;
+    }
+
 }
 
 
