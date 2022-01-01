@@ -25,7 +25,7 @@ typedef struct node
 // exp[2] - exponent of 'b' (i.e. -1), exp[3] - exponent of 'i' (i.e. 1).
 
 
-char get_next_non_space_character(void);
+int get_next_non_space_character(void);
 
 // Ensure that the node that is passed to this function is not the last node.
 void delete_after_node(Node*);
@@ -44,6 +44,12 @@ int main(void)
     printf("Enter polynomial 1: ");
 
     bool overall_sign_of_current_term_is_minus = false;
+
+    c = get_next_non_space_character();
+    if (c == '-')
+        overall_sign_of_current_term_is_minus = true;
+    else
+        ungetc(c, stdin);
 
     // This outer loop controls the individual terms in a polynomial.
     // Breaking out of this loop means that the polynomial does not contain any
@@ -97,7 +103,7 @@ int main(void)
 
             if (c == '+')
             {
-                // Applies to the next iteration.
+                // Applies to the next iteration of the outer loop.
                 overall_sign_of_current_term_is_minus = false;
 
                 break;
@@ -105,7 +111,7 @@ int main(void)
 
             else if (c == '-')
             {
-                // Applies to the next iteration.
+                // Applies to the next iteration of the outer loop.
                 overall_sign_of_current_term_is_minus = true;
 
                 break;
@@ -168,7 +174,7 @@ int main(void)
             previous_term->next = current_term;
         current_term->next = NULL;
 
-        // Applies to the next iteration.
+        // Applies to the next iteration of the outer loop.
         previous_term = current_term;
 
         if (c == '\n')
@@ -200,7 +206,7 @@ int main(void)
 }
 
 
-char get_next_non_space_character(void)
+int get_next_non_space_character(void)
 {
 
     int c;
@@ -212,6 +218,6 @@ char get_next_non_space_character(void)
     }
 
     // The program should never reach this statement.
-    return '\0';
+    return (int) '\0';
 
 }
