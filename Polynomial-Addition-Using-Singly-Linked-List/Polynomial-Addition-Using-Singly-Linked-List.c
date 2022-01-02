@@ -211,13 +211,9 @@ int get_next_non_space_character(void)
 
     int c;
 
-    while ((c = getchar()))
-    {
-        if (c != ' ')
-            return c;
-    }
+    while ((c = getchar()) == ' ')
+        continue;
 
-    // The program should never reach this statement.
-    return (int) '\0';
+    return c;
 
 }
