@@ -38,7 +38,7 @@ int main(void)
 
     printf("\nSorted array: ");
     for (unsigned i = 0; i < size; i++)
-        printf("%d \n", arr[i]);
+        printf("%d ", arr[i]);
     printf("\n");
 
     free(arr);
