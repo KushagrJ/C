@@ -1,5 +1,3 @@
-// See https://stackoverflow.com/questions/70985365/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
