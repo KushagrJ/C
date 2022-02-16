@@ -1,5 +1,4 @@
 // To be understood.
-// If you find more solutions, then add them as well.
 
 int numberOfSetBits(uint32_t);
 
