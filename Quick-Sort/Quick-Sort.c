@@ -10,6 +10,7 @@
 
 // This implementation uses Hoare's partitioning scheme.
 // Study Lomuto's partitioning scheme as well.
+// Also, study another variation of Hoare's partitioning scheme given in CLRS.
 
 // The recursion stops for either a 1-element array or a 0-element array.
 // For a 0-element array, the upperIndex will be less than the lowerIndex.
