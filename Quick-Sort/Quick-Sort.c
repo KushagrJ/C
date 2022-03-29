@@ -88,6 +88,8 @@ int main(void)
     else
         printf("Try again\n");
 
+    free(arr);
+
     return EXIT_SUCCESS;
 
 }
