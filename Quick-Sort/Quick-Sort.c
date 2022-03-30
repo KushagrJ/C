@@ -8,13 +8,10 @@
 // after the pivot has been sorted, as you have already proved that it sorts any
 // random subset of arr with less than 5 elements.
 
-// This implementation uses Hoare's partitioning scheme as given in CLRS.
-// Study Lomuto's partitioning scheme as well.
-
 // The recursion stops for either a 1-element array or a 0-element array.
-// For a 0-element array, the upperIndex will be less than the lowerIndex.
-// When the lowerIndex happens to be 0, then the upperIndex will be -1.
-// This is why int indices are used in this program, instead of unsigned ones.
+// For a 0-element array, upper_index will be less than lower_index.
+// When lower_index happens to be 0, then upper_index will be -1.
+// This is why signed indices are used in this program, instead of unsigned ones.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,10 +19,14 @@
 #include <stdbool.h>
 
 
+#define SIZE 100
+
+
+int rand_int(int, int);
+
 // Unstable sort.
 void quick_sort(int*, int, int);
 int partition(int*, int, int);
-int rand_int(int, int);
 
 
 int main(void)
@@ -33,23 +34,21 @@ int main(void)
 
     srand((unsigned) time(NULL));
 
-    int size = 100000;
-
-    int* arr = malloc(size * sizeof (int));
+    int* arr = malloc(SIZE * sizeof (int));
     if (arr == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i < size; i++)
-        arr[i] = rand();
+    for (int i = 0; i < SIZE; i++)
+        arr[i] = rand_int(-100, 100);
 
-    quick_sort(arr, 0, size - 1);
+    quick_sort(arr, 0, (SIZE - 1));
 
     bool sorting_is_successful = true;
 
-    for (int i = 0; i < (size - 1); i++)
+    for (int i = 0; i < (SIZE - 1); i++)
     {
         if (arr[i] > arr[i + 1])
         {
@@ -59,9 +58,9 @@ int main(void)
     }
 
     if (sorting_is_successful)
-        printf("Congratulations\n");
+        printf("Success\n");
     else
-        printf("Try again\n");
+        printf("Failure\n");
 
     free(arr);
 
@@ -84,40 +83,53 @@ void quick_sort(int* arr, int lower_index, int upper_index)
 }
 
 
-// In this partitioning scheme, the pivot doesn't reach its final position after
-// partitioning, as opposed to in Lomuto's scheme.
+// Study Lomuto's partitioning scheme as well.
+
+// In this partitioning scheme (Hoare's), the pivot doesn't reach its final
+// position after partitioning, as opposed to in Lomuto's scheme.
 // Instead, the subarray gets partitioned with respect to the pivot and the
 // pivot gets shifted to either of the two partitions.
-// Thus, the call to quick_sort() is quick_sort(arr, l_i, p_i), instead of
-// quick_sort(arr, l_i, (p_i - 1)).
+// Thus, the first inner call to quick_sort() is
+// quick_sort(arr, lower_index, partitioning_index), instead of
+// quick_sort(arr, lower_index, (partitioning_index - 1)).
 
-// Also, in Lomuto's scheme, when pivot_index is generated randomly, then
-// arr[pivot_index] is swapped with either arr[lower_index] or arr[upper_index],
-// depending upon the implementation, as Lomuto's scheme doesn't work on random
-// pivots.
-// But, in Hoare's scheme, any random pivot can be chosen.
+// Choosing arr[upper_index] as the pivot doesn't work. Why?
+// Thus, arr[lower_index] or arr[lower_index + (upper_index - lower_index) / 2]
+// should be chosen as the pivot.
+
+// while (arr[i] < pivot) and while (arr[j] > pivot) don't work. Why?
+// [Note that (i < upper_index) and (j > lower_index) don't need to be checked
+//  when while (arr[i] < pivot) and while (arr[j] > pivot) are used, as these
+//  automatically ensure that i and j don't run out of bounds]
+
+// Hence, while ((i < upper_index) && (arr[i] <= pivot)) and
+// while ((j > lower_index) && (arr[j] >= pivot)) need to be used.
 
 int partition(int* arr, int lower_index, int upper_index)
 {
 
-    int pivot = arr[rand_int(lower_index, upper_index)];
+    int pivot_index = rand_int(lower_index, upper_index);
+
+    int temp = arr[lower_index];
+    arr[lower_index] = arr[pivot_index];
+    arr[pivot_index] = temp;
+
+    int pivot = arr[lower_index];
 
     int i = lower_index;
     int j = upper_index;
 
     while (1)
     {
-        // or while ((i < upper_index) && (arr[i] <= pivot))
-        while (arr[i] < pivot) // (i < upper_index) is not required. Why?
+        while ((i < upper_index) && (arr[i] <= pivot))
             i++;
 
-        // or while ((j > lower_index) && (arr[j] >= pivot))
-        while (arr[j] > pivot) // (j > lower_inded) is not required. Why?
+        while ((j > lower_index) && (arr[j] >= pivot))
             j--;
 
         if (i < j)
         {
-            int temp = arr[i];
+            temp = arr[i];
             arr[i] = arr[j];
             arr[j] = temp;
         }
