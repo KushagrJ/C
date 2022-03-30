@@ -3,28 +3,28 @@
 
 
 // Stable sort.
-void bubble_sort(int *, unsigned);
+void bubble_sort(int*, size_t);
 
-int binary_search(int *, unsigned, int);
+int binary_search(int*, size_t, int);
 
 
 int main(void)
 {
 
-    unsigned size;
+    size_t size;
     printf("Enter the number of integers: ");
-    scanf("%u", &size);
+    scanf("%zu", &(size));
 
     int arr[size];
 
-    printf("Enter %u integers: ", size);
-    for (unsigned i = 0; i < size; i++)
-        scanf("%d", &arr[i]);
+    printf("Enter %zu integers: ", size);
+    for (size_t i = 0; i < size; i++)
+        scanf("%d", &(arr[i]));
 
     bubble_sort(arr, size);
 
     printf("After sorting: ");
-    for (unsigned i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
         printf("%d ", arr[i]);
     printf("\n\n");
 
@@ -32,17 +32,17 @@ int main(void)
     printf("Enter the integer to be searched: ");
     scanf("%d", &target);
 
-    int indexOfTarget = binary_search(arr, size, target);
+    int index_of_target = binary_search(arr, size, target);
 
-    if (indexOfTarget == -1)
+    if (index_of_target == -1)
     {
         printf("Integer not found!\n");
     }
 
     else
     {
-        printf("Integer found at position no. %d "
-               "in the sorted list\n", indexOfTarget + 1);
+        printf("Integer found at position no. %d in the sorted list\n",
+               (index_of_target + 1));
     }
 
     return 0;
@@ -50,7 +50,7 @@ int main(void)
 }
 
 
-void bubble_sort(int * arr, unsigned size)
+void bubble_sort(int* arr, size_t size)
 {
 
     int temp;
@@ -58,9 +58,9 @@ void bubble_sort(int * arr, unsigned size)
     // To make the best case time complexity equal to O(n).
     bool array_is_already_sorted = true;
 
-    for (unsigned i = 1; i < size; i++)
+    for (size_t i = 1; i < size; i++)
     {
-        for (unsigned j = 0; j < size - i; j++)
+        for (size_t j = 0; j < size - i; j++)
         {
             if (arr[j] > arr[j+1])
             {
@@ -78,25 +78,25 @@ void bubble_sort(int * arr, unsigned size)
 }
 
 
-int binary_search(int * arr, unsigned size, int target)
+int binary_search(int* arr, size_t size, int target)
 {
 
-    unsigned lowerIndex = 0;
-    unsigned middleIndex;
-    unsigned upperIndex = size-1;
+    size_t lower_index = 0;
+    size_t upper_index = (size - 1);
 
-    while (lowerIndex <= upperIndex)
+    while (lower_index <= upper_index)
     {
-        middleIndex = (lowerIndex + upperIndex) / 2;
+        // ((lower_index + upper_index) / 2) may cause overflow.
+        size_t middle_index = (lower_index + (upper_index - lower_index) / 2);
 
-        if (target == arr[middleIndex])
-            return middleIndex;
+        if (target == arr[middle_index])
+            return middle_index;
 
-        else if (target > arr[middleIndex])
-            lowerIndex = middleIndex + 1;
+        else if (target > arr[middle_index])
+            lower_index = (middle_index + 1);
 
         else
-            upperIndex = middleIndex - 1;
+            upper_index = (middle_index - 1);
     }
 
     return -1;
