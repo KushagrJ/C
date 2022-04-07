@@ -6,10 +6,6 @@
 // don't have to prove that it sorts its left and right halves, as you have
 // already proved that it sorts any random array with less than 5 elements.
 
-// Study another implementation of Merge Sort where the left & right arays are
-// created inside the merge() function, and the merging process gets done using
-// a single loop, by setting the extra last elements of left & right to INT_MAX.
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -105,29 +101,86 @@ void merge(int* arr, int* left, int* right, unsigned leftSize,
 
 /* Alternative :-
 
-void merge_sort(int* arr, unsigned size)
+// Assuming that the integers to be sorted are all less than INT_MAX.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+
+void merge_sort(int*, int);
+void merge(int*, int, int*, int*);
+
+
+int main(void)
 {
-    if (size > 1)
+
+    int arr_size;
+    printf("Enter the no. of integers to be sorted: ");
+    scanf("%d", &(arr_size));
+
+    int* arr = malloc(arr_size * sizeof (int));
+
+    printf("Enter %d integers: ", arr_size);
+    for (int i = 0; i < arr_size; i++)
+        scanf("%d", &(arr[i]));
+
+    merge_sort(arr, arr_size);
+
+    printf("Sorted array: ");
+    for (int i = 0; i < arr_size; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+
+    free(arr);
+
+    return 0;
+
+}
+
+
+void merge_sort(int* arr, int arr_size)
+{
+
+    if (arr_size > 1)
     {
-        unsigned leftSize = size / 2;
-        int* left = malloc(size * sizeof (int));
-        if (left == NULL)
-        {
-            fprintf(stderr, "Unsuccessful allocation\n");
-            exit(EXIT_FAILURE);
-        }
-        for (unsigned i = 0; i < size; i++)
+        int* left = malloc((arr_size + 2) * sizeof (int));
+
+        int left_size = (arr_size / 2);
+        for (int i = 0; i < left_size; i++)
             left[i] = arr[i];
+        left[left_size] = INT_MAX;
 
-        unsigned rightSize = size - leftSize;
-        int * right = left + leftSize;
+        int* right = (left + left_size + 1);
 
-        merge_sort(left, leftSize);
-        merge_sort(right, rightSize);
-        merge(arr, left, right, leftSize, rightSize);
+        int right_size = (arr_size - left_size);
+        for (int i = 0; i < right_size; i++)
+            right[i] = arr[i + left_size];
+        right[right_size] = INT_MAX;
+
+        merge_sort(left, left_size);
+        merge_sort(right, right_size);
+        merge(arr, arr_size, left, right);
 
         free(left);
     }
+
+}
+
+
+void merge(int* arr, int arr_size, int* left, int* right)
+{
+
+    int x = 0, i = 0, j = 0;
+
+    while (x < arr_size)
+    {
+        if (left[i] <= right[j])
+            arr[x++] = left[i++];
+        else
+            arr[x++] = right[j++];
+    }
+
 }
 
 */

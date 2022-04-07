@@ -19,7 +19,7 @@
 #include <stdbool.h>
 
 
-#define ARR_SIZE 100
+#define ARR_SIZE 1000000
 #define ARR_MIN -10
 #define ARR_MAX 10
 
@@ -106,20 +106,18 @@ int partition(int* arr, int lower_index, int upper_index)
 
     int pivot = arr[rand_int(lower_index, upper_index)];
 
-    int i = (lower_index );
-    int j = (upper_index );
+    int i = (lower_index - 1);
+    int j = (upper_index + 1);
 
     while (true)
     {
-        //do
-            //i++;
-        while ((i < upper_index) && (arr[i] <= pivot))
+        do
             i++;
+        while (arr[i] < pivot);
 
-        //do
-            //j--;
-        while ((j > lower_index) && (arr[j] >= pivot))
+        do
             j--;
+        while (arr[j] > pivot);
 
         if (i >= j)
             return j;
@@ -135,10 +133,10 @@ int partition(int* arr, int lower_index, int upper_index)
 
 
 
-// Three widely used schemes of partitioning are -
+// Three of the various schemes of partitioning are -
 // (1) Hoare's partitioning scheme 1 (given in CLRS)
 // (2) Hoare's partitioning scheme 2
-// (3) Lomuto's partitioning
+// (3) Lomuto's partitioning scheme
 
 // This program uses Hoare's partitioning scheme 1.
 // In this partitioning scheme, the pivot doesn't reach its final position after
@@ -208,9 +206,11 @@ int partition(int* arr, int lower_index, int upper_index)
 // Other kinds of conditions, such as while (arr[i] <= pivot) and
 // while (arr[j] >= pivot), even with additional bound-checking, don't work with
 // Hoare's partitioning scheme 1.
-// If these would have worked, then these would've made the partitioning
-// procedure faster, as in the case of while (arr[i] <= pivot) and
-// while (arr[j] >= pivot), i and j approach each other more quickly.
+// The usage of these kinds of conditions is one of the main differences
+// between Hoare's partitioning schemes 1 and 2.
+// These kinds of conditions make the partitioning process faster, as in the
+// case of while (arr[i] <= pivot) and while (arr[j] >= pivot), i and j approach
+// each other more quickly.
 
-// After studying all 3 partitioning schemes, post all 3 codes together on
-// Code Review Stack Exchange, including trivia.
+// After studying all 3 partitioning schemes, post all 3 codes together as a
+// single question on Code Review Stack Exchange, including trivia.
