@@ -1,51 +1,78 @@
-// Modify this so that the input is taken from the user at runtime.
-
 #include <stdio.h>
+#include <stdlib.h>
 #include <limits.h>
+#include <math.h>
 
 
-const int p[] = {30, 35, 15, 5, 10, 20, 25};
-const int n = ((sizeof p / sizeof p[0]) - 1);
+// The first row (i.e. row 0) and the first column (i.e. column 0) of m and n are
+// unused to make it seem as though the indexing of m and n starts from 1, not 0.
 
 
-// Set this at least as big as the width of the largest integer in the m matrix.
-#define PRINTING_WIDTH 5
-
-
-// Using int*[N+1], instead of int(*)[N+1], is incorrect, obviously.
-void matrix_chain_order(int(*)[n+1], int(*)[n+1]);
-void print_auxiliary_table(int(*)[n+1]);
-void print_optimal_parentheses(int(*)[n+1], int, int);
+void matrix_chain_order(int, const int*, int**, int**);
+void print_auxiliary_table(int, int**);
+void print_optimal_parentheses(int, int**, int, int);
 
 
 int main(void)
 {
 
-    int m[n+1][n+1], s[n+1][n+1];
+    int n;
+    printf("Enter the number of matrices: ");
+    scanf("%d", &n);
+
+    int* p = malloc((n+1) * sizeof (int));
+
+    printf("Enter the dimensions: ");
+    for (int i = 0; i <= n; i++)
+        scanf("%d", &(p[i]));
+
+    int** m = malloc((n+1) * sizeof (int*));
+    int** s = malloc((n+1) * sizeof (int*));
+
+    m[0] = NULL;
+    s[0] = NULL;
+
+    for (int i = 1; i <= n; i++)
+    {
+        m[i] = malloc((n+1) * sizeof (int));
+        s[i] = malloc((n+1) * sizeof (int));
+    }
 
     for (int i = 1; i <= n; i++)
         for (int j = 1; j <= n; j++)
             m[i][j] = s[i][j] = -1;
 
-    matrix_chain_order(m, s);
+    matrix_chain_order(n, p, m, s);
 
-    print_auxiliary_table(m);
+    putchar('\n');
+    print_auxiliary_table(n, m);
     putchar('\n');
 
-    print_auxiliary_table(s);
+    print_auxiliary_table(n, s);
     putchar('\n');
 
-    print_optimal_parentheses(s, 1, n);
+    print_optimal_parentheses(n, s, 1, n);
     putchar('\n');
 
     printf("\nOptimal cost = %d scalar multiplications\n", m[1][n]);
+
+    free(p);
+
+    for (int i = 1; i <= n; i++)
+    {
+        free(m[i]);
+        free(s[i]);
+    }
+
+    free(m);
+    free(s);
 
     return 0;
 
 }
 
 
-void matrix_chain_order(int(* m)[n+1], int(* s)[n+1])
+void matrix_chain_order(int n, const int* p, int** m, int** s)
 {
 
     for (int i = 1; i <= n; i++)
@@ -75,14 +102,16 @@ void matrix_chain_order(int(* m)[n+1], int(* s)[n+1])
 }
 
 
-void print_auxiliary_table(int(* m)[n+1])
+void print_auxiliary_table(int n, int** table)
 {
+
+    int printing_width = (log10(table[1][n]) + 2);
 
     for (int j = 0; j < n; j++)
     {
         putchar(' ');
 
-        for (int k = 0; k < (PRINTING_WIDTH + 2); k++)
+        for (int k = 0; k < (printing_width + 2); k++)
             putchar('-');
     }
 
@@ -95,10 +124,10 @@ void print_auxiliary_table(int(* m)[n+1])
 
         for (int j = 1; j <= n; j++)
         {
-            if (m[i][j] == -1)
-                printf(" %-*c ", PRINTING_WIDTH, '-');
+            if (table[i][j] == -1)
+                printf(" %-*c ", printing_width, '-');
             else
-                printf(" %-*d ", PRINTING_WIDTH, m[i][j]);
+                printf(" %-*d ", printing_width, table[i][j]);
             putchar('|');
         }
 
@@ -109,7 +138,7 @@ void print_auxiliary_table(int(* m)[n+1])
         {
             putchar(' ');
 
-            for (int k = 0; k < (PRINTING_WIDTH + 2); k++)
+            for (int k = 0; k < (printing_width + 2); k++)
                 putchar('-');
         }
 
@@ -119,7 +148,7 @@ void print_auxiliary_table(int(* m)[n+1])
 }
 
 
-void print_optimal_parentheses(int(* s)[n+1], int i, int j)
+void print_optimal_parentheses(int n, int** s, int i, int j)
 {
 
     if (i == j)
@@ -130,8 +159,8 @@ void print_optimal_parentheses(int(* s)[n+1], int i, int j)
     else
     {
         printf("(");
-        print_optimal_parentheses(s, i, s[i][j]);
-        print_optimal_parentheses(s, s[i][j] + 1, j);
+        print_optimal_parentheses(n, s, i, s[i][j]);
+        print_optimal_parentheses(n, s, s[i][j] + 1, j);
         printf(")");
     }
 

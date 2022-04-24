@@ -40,7 +40,7 @@ int main(void)
     if (arr == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
-        exit(EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
 
     for (int i = 0; i < ARR_SIZE; i++)
@@ -73,17 +73,17 @@ int main(void)
 
 int rand_int(int a, int b)
 {
+    size_t n = ((size_t) b - (size_t) a + (size_t) 1);
+    size_t rem = (((size_t) RAND_MAX + (size_t) 1) % n);
 
-    // n, i.e. the no. of integers in the range, must be <= RAND_MAX.
-    int n = (b - a + 1);
-    int rem = (RAND_MAX % n);
+    size_t x;
+    do
+    {
+        x = (size_t) rand();
+    }
+    while (x >= (((size_t) RAND_MAX + (size_t) 1) - rem));
 
-    int x = rand();
-    while (x >= (RAND_MAX - rem))
-        x = rand();
-
-    return (a + (x % n));
-
+    return (int) ((size_t) a + (x % n));
 }
 
 

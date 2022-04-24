@@ -1,9 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 
-// Stable sort.
-void bubble_sort(int*, size_t);
+int qsort_compare(const void*, const void*);
 
 int binary_search(int*, size_t, int);
 
@@ -21,7 +21,7 @@ int main(void)
     for (size_t i = 0; i < size; i++)
         scanf("%d", &(arr[i]));
 
-    bubble_sort(arr, size);
+    qsort(arr, size, sizeof (int), qsort_compare);
 
     printf("After sorting: ");
     for (size_t i = 0; i < size; i++)
@@ -50,30 +50,18 @@ int main(void)
 }
 
 
-void bubble_sort(int* arr, size_t size)
+int qsort_compare(const void* a, const void* b)
 {
 
-    int temp;
+    int x = *((const int*) a);
+    int y = *((const int*) b);
 
-    // To make the best case time complexity equal to O(n).
-    bool array_is_already_sorted = true;
-
-    for (size_t i = 1; i < size; i++)
-    {
-        for (size_t j = 0; j < size - i; j++)
-        {
-            if (arr[j] > arr[j+1])
-            {
-                array_is_already_sorted = false;
-                temp = arr[j];
-                arr[j] = arr[j+1];
-                arr[j+1] = temp;
-            }
-        }
-
-        if (array_is_already_sorted)
-            break;
-    }
+    if (x > y)
+        return 1;
+    else if (x == y)
+        return 0;
+    else
+        return -1;
 
 }
 
