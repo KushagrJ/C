@@ -8,9 +8,11 @@
 
 typedef struct edge
 {
+
     size_t end_vertex;
     int weight;
     struct edge* next;
+
 } Edge;
 
 
@@ -37,7 +39,8 @@ typedef struct graph
 
 void take_input_from_user_and_create_graph(Graph*);
 bool bellman_ford(Graph*);
-void print_shortest_path(Graph*, size_t);
+void print_shortest_paths(Graph*);
+void print_shortest_path_from_s_to_t(Graph*, size_t);
 void free_graph(Graph*);
 
 
@@ -48,30 +51,9 @@ int main(void)
     take_input_from_user_and_create_graph(&g);
 
     if (bellman_ford(&g))
-    {
-        printf("\nShortest paths :-\n");
-
-        for (size_t t = 0; t < g.n; t++)
-        {
-            if ((g.dist)[t] != INT_MAX)
-            {
-                printf("%zu to %zu (shortest distance = %3d): ", g.s, t,
-                       (g.dist)[t]);
-                print_shortest_path(&g, t);
-                putchar('\n');
-            }
-
-            else
-            {
-                printf("%zu to %zu (shortest distance = N/A): N/A\n", g.s, t);
-            }
-        }
-    }
-
+        print_shortest_paths(&g);
     else
-    {
-        printf("Error: Negative-weight cycle reachable from source detected\n");
-    }
+        printf("\nError: Negative-weight cycle reachable from source exists\n");
 
     free_graph(&g);
 
@@ -171,7 +153,31 @@ bool bellman_ford(Graph* ptr_g)
 }
 
 
-void print_shortest_path(Graph* ptr_g, size_t t)
+void print_shortest_paths(Graph* ptr_g)
+{
+
+    printf("\nShortest paths :-\n");
+
+    for (size_t t = 0; t < ((ptr_g)->n); t++)
+    {
+        if (((ptr_g)->dist)[t] != INT_MAX)
+        {
+            printf("%zu to %zu (shortest distance = %3d): ", (ptr_g)->s, t,
+                   ((ptr_g)->dist)[t]);
+            print_shortest_path_from_s_to_t(ptr_g, t);
+            putchar('\n');
+        }
+
+        else
+        {
+            printf("%zu to %zu (shortest distance = N/A): N/A\n",(ptr_g)->s,t);
+        }
+    }
+
+}
+
+
+void print_shortest_path_from_s_to_t(Graph* ptr_g, size_t t)
 {
 
     if ((ptr_g)->s == t)
@@ -188,7 +194,7 @@ void print_shortest_path(Graph* ptr_g, size_t t)
 
     else
     {
-        print_shortest_path(ptr_g, ((ptr_g)->pre)[t]);
+        print_shortest_path_from_s_to_t(ptr_g, ((ptr_g)->pre)[t]);
         printf("%zu ", t);
     }
 
