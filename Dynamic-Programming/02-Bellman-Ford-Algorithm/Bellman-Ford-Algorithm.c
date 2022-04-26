@@ -11,6 +11,7 @@ typedef struct edge
 
     size_t end_vertex;
     int weight;
+
     struct edge* next;
 
 } Edge;
@@ -72,8 +73,8 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     scanf("%zu", &((ptr_g)->s));
 
     (ptr_g)->e = calloc((ptr_g)->n, sizeof (Edge*));
-    (ptr_g)->dist = malloc((ptr_g)->n * sizeof(int));
-    (ptr_g)->pre = malloc((ptr_g)->n * sizeof(size_t));
+    (ptr_g)->dist = malloc(((ptr_g)->n) * sizeof(int));
+    (ptr_g)->pre = malloc(((ptr_g)->n) * sizeof(size_t));
 
     printf("\nEnter edges (q to quit) :-\n");
     printf("(0 2 5 means an edge from vertex 0 to vertex 2 of weight 5)\n\n");
@@ -82,9 +83,9 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     {
         size_t start_vertex, end_vertex;
         int weight;
-        printf(">>> ");
 
-        if (scanf("%zu %zu %d", &(start_vertex),&(end_vertex),&(weight)) != 3)
+        printf(">>> ");
+        if (scanf("%zu %zu %d",&(start_vertex),&(end_vertex),&(weight)) != 3)
             break;
 
         Edge* ptr_current_edge = malloc(sizeof (Edge));
@@ -187,6 +188,7 @@ void print_shortest_path_from_s_to_t(Graph* ptr_g, size_t t)
 
     // This is not required, as those t's for which dist[t] == INT_MAX will not
     // be passed to this function.
+    //
     // else if (((ptr_g)->dist)[t] == INT_MAX)
     // {
     //     printf("N/A");
