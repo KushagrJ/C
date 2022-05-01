@@ -1,3 +1,5 @@
+// sift_down() is also known as heapify().
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -14,7 +16,7 @@ int rand_int(int, int);
 // Unstable sort.
 void heap_sort(int*, size_t);
 void build_max_heap(int*, size_t);
-void max_heapify(int*, size_t, size_t);
+void sift_down(int*, size_t, size_t);
 
 
 int main(void)
@@ -90,7 +92,7 @@ void heap_sort(int* arr, size_t arr_size)
 
         (heap_size)--;
 
-        max_heapify(arr, heap_size, 0);
+        sift_down(arr, heap_size, 0);
     }
 
 }
@@ -100,12 +102,12 @@ void build_max_heap(int* arr, size_t heap_size)
 {
 
     for (int i = ((heap_size / 2) - 1); i >= 0; i--)
-        max_heapify(arr, heap_size, i);
+        sift_down(arr, heap_size, i);
 
 }
 
 
-void max_heapify(int* arr, size_t heap_size, size_t index_of_parent)
+void sift_down(int* arr, size_t heap_size, size_t index_of_parent)
 {
 
     size_t index_of_left_child = ((2 * index_of_parent) + 1);
@@ -131,7 +133,7 @@ void max_heapify(int* arr, size_t heap_size, size_t index_of_parent)
         arr[index_of_largest] = arr[index_of_parent];
         arr[index_of_parent] = temp;
 
-        max_heapify(arr, heap_size, index_of_largest);
+        sift_down(arr, heap_size, index_of_largest);
     }
 
 }
@@ -145,7 +147,7 @@ void max_heapify(int* arr, size_t heap_size, size_t index_of_parent)
  * Iterative Version :-
 
 
-   Since max_heapify() uses tail recursion, therefore converting this to
+   Since sift_down() uses tail recursion, therefore converting this to
    iteration is straightforward.
 
 
