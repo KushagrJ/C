@@ -73,8 +73,25 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     scanf("%zu", &((ptr_g)->s));
 
     (ptr_g)->e = calloc((ptr_g)->n, sizeof (Edge*));
+    if ((ptr_g)->e == NULL)
+    {
+        fprintf(stderr, "Unsuccessful allocation\n");
+        exit(EXIT_FAILURE);
+    }
+
     (ptr_g)->dist = malloc(((ptr_g)->n) * sizeof(int));
+    if ((ptr_g)->dist == NULL)
+    {
+        fprintf(stderr, "Unsuccessful allocation\n");
+        exit(EXIT_FAILURE);
+    }
+
     (ptr_g)->pre = malloc(((ptr_g)->n) * sizeof(size_t));
+    if ((ptr_g)->pre == NULL)
+    {
+        fprintf(stderr, "Unsuccessful allocation\n");
+        exit(EXIT_FAILURE);
+    }
 
     printf("\nEnter edges (q to quit) :-\n");
     printf("(0 2 5 means an edge from vertex 0 to vertex 2 of weight 5)\n\n");
@@ -89,6 +106,11 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
             break;
 
         Edge* ptr_current_edge = malloc(sizeof (Edge));
+        if (ptr_current_edge == NULL)
+        {
+            fprintf(stderr, "Unsuccessful allocation\n");
+            exit(EXIT_FAILURE);
+        }
 
         (ptr_current_edge)->end_vertex = end_vertex;
         (ptr_current_edge)->weight = weight;
@@ -181,24 +203,10 @@ void print_shortest_paths(Graph* ptr_g)
 void print_shortest_path_from_s_to_t(Graph* ptr_g, size_t t)
 {
 
-    if ((ptr_g)->s == t)
-    {
-        printf("%zu ", t);
-    }
-
-    // This is not required, as those t's for which dist[t] == INT_MAX will not
-    // be passed to this function.
-    //
-    // else if (((ptr_g)->dist)[t] == INT_MAX)
-    // {
-    //     printf("N/A");
-    // }
-
-    else
-    {
+    if ((ptr_g)->s != t)
         print_shortest_path_from_s_to_t(ptr_g, ((ptr_g)->pre)[t]);
-        printf("%zu ", t);
-    }
+
+    printf("%zu ", t);
 
 }
 
