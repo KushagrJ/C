@@ -1,6 +1,8 @@
+// A disjoint set forest has been used for the vertices.
+
 // Incorporate 'Union by Rank' and 'Path Compression' before posting on
 // Code Review Stack Exchange.
-//
+
 // Why does union by rank, i.e. making the root of the tree with fewer nodes
 // point to the root of the tree with more nodes, increase efficiency?
 // Understand the reason properly.
@@ -15,9 +17,11 @@
 
 struct vertex
 {
-    size_t vertex_number;
+    // x is the vertex number of this vertex.
+    size_t x;
 
-    struct vertex* parent_vertex;
+    // parent points to the parent vertex of this vertex in the rooted tree.
+    struct vertex* parent;
 };
 
 typedef struct vertex Vertex;
@@ -25,12 +29,14 @@ typedef struct vertex Vertex;
 
 struct edge
 {
-    // u and v are the end vertices.
-    size_t vertex_number_of_u, vertex_number_of_v;
+    // u and v are the vertex numbers of the end vertices of this edge.
+    size_t u, v;
 
+    // weight is the weight of this edge.
     int weight;
 
-    struct edge* next_edge;
+    // next points to the next edge in the singly linked list of the edges.
+    struct edge* next;
 };
 
 typedef struct edge Edge;
@@ -38,10 +44,13 @@ typedef struct edge Edge;
 
 struct graph
 {
-    size_t number_of_vertices;
+    // n is the number of vertices in the graph.
+    size_t n;
 
+    // vertices is an n-element array containing the vertex objects.
     Vertex* vertices;
 
+    // head_edge points to the head edge in the singly linked list of the edges.
     Edge* head_edge;
 };
 
@@ -80,19 +89,19 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
 {
 
     printf("Enter the number of vertices: ");
-    scanf("%zu", &((ptr_g)->number_of_vertices));
+    scanf("%zu", &((ptr_g)->n));
 
-    (ptr_g)->vertices = malloc(((ptr_g)->number_of_vertices) * sizeof (Vertex));
+    (ptr_g)->vertices = malloc(((ptr_g)->n) * sizeof (Vertex));
     if ((ptr_g)->vertices == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
         exit(EXIT_FAILURE);
     }
 
-    for (size_t i = 0; i < (ptr_g)->number_of_vertices; i++)
+    for (size_t i = 0; i < (ptr_g)->n; i++)
     {
-        (((ptr_g)->vertices)[i]).vertex_number = i;
-        (((ptr_g)->vertices)[i]).parent_vertex = NULL;
+        (((ptr_g)->vertices)[i]).x = i;
+        (((ptr_g)->vertices)[i]).parent = NULL;
     }
 
     (ptr_g)->head_edge = NULL;
@@ -102,13 +111,12 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
 
     while (true)
     {
-        size_t vertex_number_of_u, vertex_number_of_v;
+        size_t u, v;
         int weight;
 
         // printf(">>> ");
-        if (scanf("%zu", &(vertex_number_of_u)) != 1)
+        if (scanf("%zu %zu %d", &(u), &(v), &(weight)) != 3)
             break;
-        scanf("%zu %d", &(vertex_number_of_v), &(weight));
 
         Edge* ptr_current_edge = malloc(sizeof (Edge));
         if (ptr_current_edge == NULL)
@@ -117,11 +125,11 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
             exit(EXIT_FAILURE);
         }
 
-        (ptr_current_edge)->vertex_number_of_u = (vertex_number_of_u - 1);
-        (ptr_current_edge)->vertex_number_of_v = (vertex_number_of_v - 1);
+        (ptr_current_edge)->u = (u - 1);
+        (ptr_current_edge)->v = (v - 1);
         (ptr_current_edge)->weight = weight;
 
-        (ptr_current_edge)->next_edge = (ptr_g)->head_edge;
+        (ptr_current_edge)->next = (ptr_g)->head_edge;
         (ptr_g)->head_edge = ptr_current_edge;
     }
 
@@ -133,8 +141,8 @@ void kruskal(Graph* ptr_g)
 
     // Simply print the edges constituting the MST, instead of storing them.
 
-    for (size_t i = 0; i < (ptr_g)->number_of_vertices; i++)
-        make_set(ptr_g, i);
+    for (size_t x = 0; x < (ptr_g)->n; x++)
+        make_set(ptr_g, x);
 
     // merge_sort_singly_linked_list(&((ptr_g)->head_edge));
 
@@ -144,61 +152,57 @@ void kruskal(Graph* ptr_g)
 
     while (ptr_current_edge)
     {
-        if (find_set(ptr_g, (ptr_current_edge)->vertex_number_of_u) !=
-                find_set(ptr_g, (ptr_current_edge)->vertex_number_of_v))
-        {
-            printf("%zu %zu\n", ((ptr_current_edge)->vertex_number_of_u + 1),
-                   ((ptr_current_edge)->vertex_number_of_v) + 1);
+        // root_u is the vertex number of the root vertex of the rooted tree
+        // containing vertex number u.
+        size_t root_u = find_set(ptr_g, (ptr_current_edge)->u);
 
-            union_set(ptr_g, (ptr_current_edge)->vertex_number_of_u,
-                      (ptr_current_edge)->vertex_number_of_v);
+        // root_v is the vertex number of the root vertex of the rooted tree
+        // containing vertex number v.
+        size_t root_v = find_set(ptr_g, (ptr_current_edge)->v);
+
+        if (root_u != root_v)
+        {
+            printf("%zu %zu\n", ((ptr_current_edge)->u + 1),
+                   ((ptr_current_edge)->v) + 1);
+
+            union_set(ptr_g, root_u, root_v);
         }
 
-        ptr_current_edge = (ptr_current_edge)->next_edge;
+        ptr_current_edge = (ptr_current_edge)->next;
     }
 
 }
 
 
-void make_set(Graph* ptr_g, size_t vertex_number)
+void make_set(Graph* ptr_g, size_t x)
 {
 
-    (((ptr_g)->vertices)[vertex_number]).parent_vertex =
-        (((ptr_g)->vertices) + vertex_number);
+    Vertex* vertices = (ptr_g)->vertices;
+
+    (vertices[x]).parent = (vertices + x);
 
 }
 
 
-size_t find_set(Graph* ptr_g, size_t vertex_number)
+size_t find_set(Graph* ptr_g, size_t x)
 {
 
-    size_t vertex_number_of_representative;
+    Vertex* ptr_current_vertex = ((ptr_g)->vertices + x);
 
-    Vertex* ptr_current_vertex = ((ptr_g)->vertices + vertex_number);
+    while ((ptr_current_vertex)->parent != ptr_current_vertex)
+        ptr_current_vertex = (ptr_current_vertex)->parent;
 
-    while (true)
-    {
-        vertex_number_of_representative = (ptr_current_vertex)->vertex_number;
-
-        if ((ptr_current_vertex)->parent_vertex == ptr_current_vertex)
-            break;
-
-        ptr_current_vertex = (ptr_current_vertex)->parent_vertex;
-    }
-
-    return vertex_number_of_representative;
+    return (ptr_current_vertex)->x;
 
 }
 
 
-void union_set(Graph* ptr_g, size_t u, size_t v)
+void union_set(Graph* ptr_g, size_t root_u, size_t root_v)
 {
 
-    size_t vertex_number_of_representative_of_u = find_set(ptr_g, u);
-    size_t vertex_number_of_representative_of_v = find_set(ptr_g, v);
+    Vertex* vertices = (ptr_g)->vertices;
 
-    (((ptr_g)->vertices)[vertex_number_of_representative_of_u]).parent_vertex =
-        (((ptr_g)->vertices) + vertex_number_of_representative_of_v);
+    (vertices[root_u]).parent = (vertices + root_v);
 
 }
 
@@ -212,7 +216,7 @@ void free_graph(Graph* ptr_g)
 
     while (ptr_current_edge)
     {
-        Edge* temp = (ptr_current_edge)->next_edge;
+        Edge* temp = (ptr_current_edge)->next;
         free(ptr_current_edge);
         ptr_current_edge = temp;
     }
