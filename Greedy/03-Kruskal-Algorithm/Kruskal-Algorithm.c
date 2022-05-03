@@ -98,10 +98,10 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
         exit(EXIT_FAILURE);
     }
 
-    for (size_t i = 0; i < (ptr_g)->n; i++)
+    for (size_t x = 0; x < (ptr_g)->n; x++)
     {
-        (((ptr_g)->vertices)[i]).x = i;
-        (((ptr_g)->vertices)[i]).parent = NULL;
+        (((ptr_g)->vertices)[x]).x = x;
+        make_set(ptr_g, x);
     }
 
     (ptr_g)->head_edge = NULL;
@@ -139,10 +139,11 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
 void kruskal(Graph* ptr_g)
 {
 
-    // Simply print the edges constituting the MST, instead of storing them.
+    // The edges constituting an MST have directly been printed, instead of
+    // being stored.
 
-    for (size_t x = 0; x < (ptr_g)->n; x++)
-        make_set(ptr_g, x);
+    // The step consisting of make_set() operations has been completed in the
+    // take_input_from_user_and_create_graph() function.
 
     // merge_sort_singly_linked_list(&((ptr_g)->head_edge));
 
@@ -177,9 +178,7 @@ void kruskal(Graph* ptr_g)
 void make_set(Graph* ptr_g, size_t x)
 {
 
-    Vertex* vertices = (ptr_g)->vertices;
-
-    (vertices[x]).parent = (vertices + x);
+    (((ptr_g)->vertices)[x]).parent = ((ptr_g)->vertices + x);
 
 }
 
@@ -200,9 +199,7 @@ size_t find_set(Graph* ptr_g, size_t x)
 void union_set(Graph* ptr_g, size_t root_u, size_t root_v)
 {
 
-    Vertex* vertices = (ptr_g)->vertices;
-
-    (vertices[root_u]).parent = (vertices + root_v);
+    (((ptr_g)->vertices)[root_u]).parent = ((ptr_g)->vertices + root_v);
 
 }
 
