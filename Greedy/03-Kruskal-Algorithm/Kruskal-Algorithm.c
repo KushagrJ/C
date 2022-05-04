@@ -110,7 +110,8 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     }
 
     printf("\nEnter edges (q to quit) :-\n");
-    printf("(1 2 5 means an edge between vertices 1 and 2 of weight 5)\n\n");
+    printf("(1 2 5 means an edge between vertices 1 and 2 of weight 5)\n");
+    printf("(Don't enter self-loops and parallel edges)\n\n");
 
     Edge* ptr_dummy_head_edge = calloc(1, sizeof (Edge));
     if (ptr_dummy_head_edge == NULL)
