@@ -1,121 +1,203 @@
+// This program uses a different way to create a singly linked list, in order to
+// avoid the if (ptr_head_node == NULL) check in every iteration.
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <stdbool.h>
+
+
+#define LIST_SIZE 100000
+#define LIST_MIN -10
+#define LIST_MAX 10
 
 
 struct node
 {
     int num;
-    struct node* next;
+    struct node* ptr_next_node;
 };
 
 typedef struct node Node;
 
 
-void merge_sort_singly_linked_list(Node**);
+int rand_int(int, int);
+
+// Stable sort.
+void merge_sort(Node**);
+Node* find_middle_node(Node*);
+void merge(Node**, Node*, Node*);
 
 
 int main(void)
 {
 
-    Node* head = NULL;
+    srand((unsigned) time(NULL));
 
-    Node* current;
-    Node* previous;
-
-    int num;
-    printf("Enter integers (q to quit): ");
-
-    while (scanf("%d", &num) == 1)
+    Node* ptr_dummy_head_node = calloc(1, sizeof (Node));
+    if (ptr_dummy_head_node == NULL)
     {
-        current = (Node*) malloc(sizeof (Node));
-        current->num = num;
-
-        if (head == NULL)
-            head = current;
-        else
-            previous->next = current;
-        current->next = NULL;
-
-        previous = current;
+        fprintf(stderr, "Unsuccessful allocation\n");
+        return EXIT_FAILURE;
     }
 
-    if (head)
+    Node* ptr_previous_node = ptr_dummy_head_node;
+    Node* ptr_current_node;
+
+    for (int i = 0; i < LIST_SIZE; i++)
     {
-        printf("Integers entered: ");
-        current = head;
-        while (current)
+        ptr_current_node = (Node*) malloc(sizeof (Node));
+        if (ptr_current_node == NULL)
         {
-            printf("%d ", current->num);
-            current = current->next;
+            fprintf(stderr, "Unsuccessful allocation\n");
+            return EXIT_FAILURE;
         }
-        putchar('\n');
+
+        (ptr_current_node)->num = rand_int(LIST_MIN, LIST_MAX);
+
+        (ptr_previous_node)->ptr_next_node = ptr_current_node;
+        (ptr_current_node)->ptr_next_node = NULL;
+
+        ptr_previous_node = ptr_current_node;
     }
 
-    while (head)
+    Node* ptr_head_node = ((ptr_dummy_head_node)->ptr_next_node);
+    free(ptr_dummy_head_node);
+
+    if (ptr_head_node)
     {
-        Node* temp = head->next;
-        free(head);
-        head = temp;
-    }
+        merge_sort(&(ptr_head_node));
 
-    return 0;
+        bool sorting_is_successful = true;
 
-}
+        ptr_previous_node = ptr_head_node;
+        ptr_current_node = ((ptr_head_node)->ptr_next_node);
 
-
-void merge_sort_singly_linked_list(Node** ptr_head
-{
-
-The main function
-public static Node merge_sort(Node head) 
-{
-    if(head == null || head.next == null) 
-        return head;
-        
-    Node middle = getMiddle(head);      //get the middle of the list
-    Node left_head = head;
-    Node right_head = middle.next; 
-    middle.next = null;             //split the list into two halfs
-
-    return merge(merge_sort(left_head), merge_sort(right_head));  //recurse on that
-}
-
-//Merge subroutine to merge two sorted lists
-public static Node merge(Node a, Node b)
-{
-    Node dummyHead = new Node();
-    for(Node current  = dummyHead; a != null && b != null; current = current.next;)
-    {
-        if(a.data <= b.data) 
+        while (ptr_current_node)
         {
-            current.next = a; 
-            a = a.next; 
+            if (((ptr_previous_node)->num) > ((ptr_current_node)->num))
+            {
+                sorting_is_successful = false;
+                break;
+            }
+
+            ptr_previous_node = ptr_current_node;
+            ptr_current_node = ((ptr_current_node)->ptr_next_node);
         }
+
+        if (sorting_is_successful)
+            printf("Success\n");
         else
-        { 
-            current.next = b;
-            b = b.next; 
-        }
-        
+            printf("Failure\n");
     }
-    dummyHead.next = (a == null) ? b : a;
-    return dummyHead.next;
+
+    while (ptr_head_node)
+    {
+        Node* ptr_temp_node = ((ptr_head_node)->ptr_next_node);
+        free(ptr_head_node);
+        ptr_head_node = ptr_temp_node;
+    }
+
+    return EXIT_SUCCESS;
+
 }
 
-//Finding the middle element of the list for splitting
-public static Node getMiddle(Node head)
+
+int rand_int(int a, int b)
 {
-    if(head == null) 
-        return head;
-    
-    Node slow = head, fast = head;
-    
-    while(fast.next != null && fast.next.next != null)
+    size_t n = ((size_t) b - (size_t) a + (size_t) 1);
+    size_t rem = (((size_t) RAND_MAX + (size_t) 1) % n);
+
+    size_t x;
+    do
     {
-        slow = slow.next;
-        fast = fast.next.next;
+        x = (size_t) rand();
     }
-    return slow;
+    while (x >= (((size_t) RAND_MAX + (size_t) 1) - rem));
+
+    return (int) ((size_t) a + (x % n));
 }
+
+
+void merge_sort(Node** ptr_ptr_head_node)
+{
+
+    if ((*ptr_ptr_head_node) && ((*ptr_ptr_head_node)->ptr_next_node))
+    {
+        Node* ptr_middle_node = find_middle_node(*ptr_ptr_head_node);
+
+        Node* ptr_head_node_of_left = *ptr_ptr_head_node;
+
+        Node* ptr_head_node_of_right = (ptr_middle_node)->ptr_next_node;
+        (ptr_middle_node)->ptr_next_node = NULL;
+
+        merge_sort(&(ptr_head_node_of_left));
+        merge_sort(&(ptr_head_node_of_right));
+
+        merge(ptr_ptr_head_node, ptr_head_node_of_left, ptr_head_node_of_right);
+    }
+
+}
+
+
+Node* find_middle_node(Node* ptr_head_node)
+{
+
+    Node* slow_pointer = ptr_head_node;
+    Node* fast_pointer = ptr_head_node;
+
+    while (((fast_pointer)->ptr_next_node) &&
+               (((fast_pointer)->ptr_next_node)->ptr_next_node))
+    {
+        slow_pointer = ((slow_pointer)->ptr_next_node);
+        fast_pointer = (((fast_pointer)->ptr_next_node)->ptr_next_node);
+    }
+
+    return slow_pointer;
+
+}
+
+
+void merge(Node** ptr_ptr_head_node, Node* ptr_current_node_of_left,
+           Node* ptr_current_node_of_right)
+{
+
+    Node* ptr_dummy_head_node = calloc(1, sizeof (Node));
+    if (ptr_dummy_head_node == NULL)
+    {
+        fprintf(stderr, "Unsuccessful allocation\n");
+        exit(EXIT_FAILURE);;
+    }
+
+    Node* ptr_current_node = ptr_dummy_head_node;
+
+    while ((ptr_current_node_of_left) && (ptr_current_node_of_right))
+    {
+        if ((ptr_current_node_of_left)->num <= (ptr_current_node_of_right)->num)
+        {
+            (ptr_current_node)->ptr_next_node = ptr_current_node_of_left;
+
+            ptr_current_node_of_left =
+                ((ptr_current_node_of_left)->ptr_next_node);
+        }
+
+        else
+        {
+            (ptr_current_node)->ptr_next_node = ptr_current_node_of_right;
+
+            ptr_current_node_of_right =
+                ((ptr_current_node_of_right)->ptr_next_node);
+        }
+
+        ptr_current_node = ((ptr_current_node)->ptr_next_node);
+    }
+
+    if (ptr_current_node_of_left)
+        (ptr_current_node)->ptr_next_node = ptr_current_node_of_left;
+    else if (ptr_current_node_of_right)
+        (ptr_current_node)->ptr_next_node = ptr_current_node_of_right;
+
+    *ptr_ptr_head_node = ((ptr_dummy_head_node)->ptr_next_node);
+    free(ptr_dummy_head_node);
 
 }
