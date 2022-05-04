@@ -66,6 +66,56 @@ int main(void)
 void merge_sort_singly_linked_list(Node** ptr_head
 {
 
+The main function
+public static Node merge_sort(Node head) 
+{
+    if(head == null || head.next == null) 
+        return head;
+        
+    Node middle = getMiddle(head);      //get the middle of the list
+    Node left_head = head;
+    Node right_head = middle.next; 
+    middle.next = null;             //split the list into two halfs
 
+    return merge(merge_sort(left_head), merge_sort(right_head));  //recurse on that
+}
+
+//Merge subroutine to merge two sorted lists
+public static Node merge(Node a, Node b)
+{
+    Node dummyHead = new Node();
+    for(Node current  = dummyHead; a != null && b != null; current = current.next;)
+    {
+        if(a.data <= b.data) 
+        {
+            current.next = a; 
+            a = a.next; 
+        }
+        else
+        { 
+            current.next = b;
+            b = b.next; 
+        }
+        
+    }
+    dummyHead.next = (a == null) ? b : a;
+    return dummyHead.next;
+}
+
+//Finding the middle element of the list for splitting
+public static Node getMiddle(Node head)
+{
+    if(head == null) 
+        return head;
+    
+    Node slow = head, fast = head;
+    
+    while(fast.next != null && fast.next.next != null)
+    {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    return slow;
+}
 
 }
