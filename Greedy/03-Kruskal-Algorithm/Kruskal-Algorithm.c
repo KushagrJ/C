@@ -46,10 +46,10 @@ typedef struct edge Edge;
 
 struct graph
 {
-    // n is the number of vertex objects in this graph.
+    // n is the number of vertices (i.e. vertex objects) in this graph.
     size_t n;
 
-    // vertices is an n-element array containing the vertex objects.
+    // vertices is an n-element array consisting of the vertex objects.
     Vertex* vertices;
 
     // ptr_head_edge points to the head edge object in the singly linked list of
@@ -85,7 +85,7 @@ int main(void)
 
     free_graph(&g);
 
-    return 0;
+    return EXIT_SUCCESS;
 
 }
 
@@ -303,7 +303,7 @@ void merge(Edge** ptr_ptr_head_edge, Edge* ptr_current_edge_of_left,
 
     if (ptr_current_edge_of_left)
         (ptr_current_edge)->ptr_next_edge = ptr_current_edge_of_left;
-    else if (ptr_current_edge_of_right)
+    else
         (ptr_current_edge)->ptr_next_edge = ptr_current_edge_of_right;
 
     *ptr_ptr_head_edge = ((ptr_dummy_head_edge)->ptr_next_edge);
