@@ -128,7 +128,7 @@ void merge_sort(Node** ptr_ptr_head_node)
 
         Node* ptr_head_node_of_left = *ptr_ptr_head_node;
 
-        Node* ptr_head_node_of_right = (ptr_middle_node)->ptr_next_node;
+        Node* ptr_head_node_of_right = ((ptr_middle_node)->ptr_next_node);
         (ptr_middle_node)->ptr_next_node = NULL;
 
         merge_sort(&(ptr_head_node_of_left));
@@ -194,7 +194,7 @@ void merge(Node** ptr_ptr_head_node, Node* ptr_current_node_of_left,
 
     if (ptr_current_node_of_left)
         (ptr_current_node)->ptr_next_node = ptr_current_node_of_left;
-    else if (ptr_current_node_of_right)
+    else
         (ptr_current_node)->ptr_next_node = ptr_current_node_of_right;
 
     *ptr_ptr_head_node = ((ptr_dummy_head_node)->ptr_next_node);
