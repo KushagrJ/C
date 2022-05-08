@@ -102,7 +102,7 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
         int weight;
 
         printf(">>> ");
-        if (scanf("%zu %zu %d",&(start_vertex),&(end_vertex),&(weight)) != 3)
+        if (scanf("%zu %zu %d", &(start_vertex),&(end_vertex),&(weight)) != 3)
             break;
 
         Edge* ptr_current_edge = malloc(sizeof (Edge));
