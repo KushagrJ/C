@@ -227,9 +227,10 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
 
  * When developing a dynamic programming algorithm, a sequence of four steps
    needs to be followed -
-   (1) Characterize the structure of an optimal solution, i.e. identify the
-       optimal substructure.
-   (2) Recursively define the value of an optimal solution.
+   (1) Characterize the structure of an optimal solution (and identify the
+       optimal substructure).
+   (2) Recursively define the value of an optimal solution (and identify the
+       overlapping subproblems).
    (3) Compute the value of an optimal solution, typically in a bottom-up
        fashion.
    (4) Construct an optimal solution from the computed information.
