@@ -243,6 +243,8 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
 
 
 
+
+
  /*
 
  * The Matrix Chain Multiplication Problem (Dynamic Programming) :-
