@@ -137,23 +137,24 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
  * Dynamic programming, like divide-and-conquer, is a strategy to solve a
    problem by combining the solutions to its subproblems.
  * Both approaches may use either recursion or iteration to solve problems.
- * While divide-and-conquer may be applied to problems having overlapping or
-   non-overlapping subproblems, dynamic programming can only be applied to
-   problems having overlapping subproblems.
+ * While divide-and-conquer may be applied to problems whose respective
+   algorithm encounters overlapping or non-overlapping subproblems, dynamic
+   programming can only be applied to problems whose corresponding algorithm
+   encounters overlapping subproblems.
  * The technique called 'memoization' refers to storing the answers to the
    subproblems in a table when solving a problem in a 'top-down' fashion,
    whereas the technique called 'tabulation' refers to storing the answers to
    the subproblems in a table when solving a problem in a 'bottom-up' fashion.
    Both of these techniques are discussed below to solve the problem of
    finding the n-th fibonacci number using divide-and-conquer.
- * To solve a problem having overlapping subproblems, dynamic programming always
-   uses memoization/tabulation, whereas divide-and-conquer may or may not use
-   memoization/tabulation.
+ * To solve a problem whose respective algorithm encounters overlapping
+   subproblems, dynamic programming always uses memoization/tabulation, whereas
+   divide-and-conquer may or may not use memoization/tabulation.
 
- * Having overlapping subproblems is not sufficient for dynamic programming to
-   be applicable for a problem.
-   In addition to having overlapping subproblems, a problem must also have the
-   optimal substructure property.
+ * The corresponding algorithm encountering overlapping subproblems is not
+   sufficient for dynamic programming to be applicable for a problem.
+   In addition to the corresponding algorithm encountering overlapping
+   subproblems, a problem must also have the optimal substructure property.
  * This means that the problem must be of an optimization type, i.e. the problem
    must have multiple possible solutions, out of which one or more solutions
    must be the optimal ones, and, more importantly, the optimal solution to the
@@ -230,7 +231,8 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
    (1) Characterize the structure of an optimal solution (and identify the
        optimal substructure).
    (2) Recursively define the value of an optimal solution (and identify the
-       overlapping subproblems).
+       overlapping subproblems which would be encountered by the corresponding
+       algorithm).
    (3) Compute the value of an optimal solution, typically in a bottom-up
        fashion.
    (4) Construct an optimal solution from the computed information.
@@ -437,10 +439,9 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
        non-optimal solutions to smaller problems can never lead to optimal
        solutions to bigger problems.
 
-    size_t* p = malloc((n
        When optimal solutions to smaller problems are found, only one of those
        multiple (possibly) optimal solutions having the same value is stored.
-       But, for this problem, it doesn't matter which optimal solution to a
+       But, for this algorithm, it doesn't matter which optimal solution to a
        smaller problem is stored.
        For eg., if (A_0 A_1 ... A_k) (A_(k+1) A_(k+2) ... A_(n-1)) is an optimal
        parenthesization, then which optimal parenthesization is used for
