@@ -42,14 +42,14 @@ int main(void)
 
     for (size_t i = 0; i < n; i++)
     {
-        m[i] = calloc(n, sizeof (size_t));
+        m[i] = malloc(n * sizeof (size_t));
         if (m[i] == NULL)
         {
             fprintf(stderr, "Unsuccessful allocation\n");
             return EXIT_FAILURE;
         }
 
-        s[i] = calloc(n, sizeof (size_t));
+        s[i] = malloc(n * sizeof (size_t));
         if (s[i] == NULL)
         {
             fprintf(stderr, "Unsuccessful allocation\n");
