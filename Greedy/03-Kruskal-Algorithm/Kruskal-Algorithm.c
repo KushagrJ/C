@@ -15,49 +15,50 @@
 #include <stdbool.h>
 
 
-struct vertex
+typedef struct vertex
 {
-    // x is the vertex number of this vertex object.
+
+    // x is the vertex number of the vertex corresponding to this vertex object.
     size_t x;
 
     // ptr_parent_vertex points to the parent vertex object of this vertex
     // object in the rooted tree.
     struct vertex* ptr_parent_vertex;
-};
 
-typedef struct vertex Vertex;
+} Vertex;
 
 
-struct edge
+typedef struct edge
 {
-    // u and v are the vertex numbers of the end vertices of this edge object.
+
+    // u and v are the vertex numbers of the end vertices of the edge
+    // corresponding to this edge object.
     size_t u, v;
 
-    // weight is the weight of this edge object.
-    int weight;
+    // w is the weight of the edge corresponding to this edge object.
+    int w;
 
-    // ptr_next_edge points to the next edge object in the singly linked list of
-    // the edge objects.
+    // ptr_next_edge points to the next edge object in the singly linked list.
     struct edge* ptr_next_edge;
-};
 
-typedef struct edge Edge;
+} Edge;
 
 
-struct graph
+typedef struct graph
 {
-    // n is the number of vertices (i.e. vertex objects) in this graph.
+
+    // n is the number of vertices in the graph corresponding to this graph
+    // object.
     size_t n;
 
-    // vertices is an n-element array consisting of the vertex objects.
+    // For the graph corresponding to this graph object, vertices stores the
+    // vertex objects.
     Vertex* vertices;
 
-    // ptr_head_edge points to the head edge object in the singly linked list of
-    // the edge objects.
+    // ptr_head_edge points to the head edge object in the singly linked list.
     Edge* ptr_head_edge;
-};
 
-typedef struct graph Graph;
+} Graph;
 
 
 void take_input_from_user_and_create_graph(Graph*);
@@ -93,19 +94,22 @@ int main(void)
 void take_input_from_user_and_create_graph(Graph* ptr_g)
 {
 
+    size_t n;
     printf("Enter the number of vertices: ");
-    scanf("%zu", &((ptr_g)->n));
+    scanf("%zu", &n);
+    ((ptr_g)->n) = n;
 
-    (ptr_g)->vertices = malloc(((ptr_g)->n) * sizeof (Vertex));
-    if ((ptr_g)->vertices == NULL)
+    Vertex* vertices = malloc(n * sizeof (Vertex));
+    if (vertices == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
         exit(EXIT_FAILURE);
     }
+    ((ptr_g)->vertices) = vertices;
 
-    for (size_t x = 0; x < (ptr_g)->n; x++)
+    for (size_t x = 0; x < n; x++)
     {
-        (((ptr_g)->vertices)[x]).x = x;
+        (vertices[x]).x = x;
         make_set(ptr_g, x);
     }
 
@@ -113,12 +117,13 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     printf("(1 2 5 means an edge between vertices 1 and 2 of weight 5)\n");
     printf("(Don't enter self-loops and parallel edges)\n\n");
 
-    Edge* ptr_dummy_head_edge = calloc(1, sizeof (Edge));
+    Edge* ptr_dummy_head_edge = malloc(sizeof (Edge));
     if (ptr_dummy_head_edge == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
         exit(EXIT_FAILURE);
     }
+    ((ptr_dummy_head_edge)->ptr_next_edge) = NULL;
 
     Edge* ptr_previous_edge = ptr_dummy_head_edge;
     Edge* ptr_current_edge;
@@ -126,10 +131,10 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     while (true)
     {
         size_t u, v;
-        int weight;
+        int w;
 
         // printf(">>> ");
-        if (scanf("%zu %zu %d", &(u), &(v), &(weight)) != 3)
+        if (scanf("%zu %zu %d", &u, &v, &w) != 3)
             break;
 
         ptr_current_edge = malloc(sizeof (Edge));
@@ -141,7 +146,7 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
 
         (ptr_current_edge)->u = (u - 1);
         (ptr_current_edge)->v = (v - 1);
-        (ptr_current_edge)->weight = weight;
+        (ptr_current_edge)->w = w;
 
         (ptr_previous_edge)->ptr_next_edge = ptr_current_edge;
         (ptr_current_edge)->ptr_next_edge = NULL;
@@ -158,8 +163,8 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
 void kruskal(Graph* ptr_g)
 {
 
-    // The edges constituting an MST have directly been printed, instead of
-    // being stored.
+    // The edges constituting an MST will be printed directly, instead of being
+    // stored.
 
     // The step consisting of the make_set() operations has been completed in
     // the take_input_from_user_and_create_graph() function.
@@ -172,12 +177,14 @@ void kruskal(Graph* ptr_g)
 
     while (ptr_current_edge)
     {
-        // root_u is the vertex number of the root vertex object of the rooted
-        // tree containing the vertex object whose vertex number is u.
+        // root_u is the vertex number of the vertex corresponding to the root
+        // vertex object of the rooted tree containing that vertex's
+        // corresponding vertex object whose vertex number is u.
         size_t root_u = find_set(ptr_g, (ptr_current_edge)->u);
 
-        // root_v is the vertex number of the root vertex object of the rooted
-        // tree containing the vertex object whose vertex number is v.
+        // root_v is the vertex number of the vertex corresponding to the root
+        // vertex object of the rooted tree containing that vertex's
+        // corresponding vertex object whose vertex number is v.
         size_t root_v = find_set(ptr_g, (ptr_current_edge)->v);
 
         if (root_u != root_v)
@@ -270,7 +277,7 @@ void merge(Edge** ptr_ptr_head_edge, Edge* ptr_current_edge_of_left,
            Edge* ptr_current_edge_of_right)
 {
 
-    Edge* ptr_dummy_head_edge = calloc(1, sizeof (Edge));
+    Edge* ptr_dummy_head_edge = malloc(sizeof (Edge));
     if (ptr_dummy_head_edge == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
@@ -281,8 +288,8 @@ void merge(Edge** ptr_ptr_head_edge, Edge* ptr_current_edge_of_left,
 
     while ((ptr_current_edge_of_left) && (ptr_current_edge_of_right))
     {
-        if ((ptr_current_edge_of_left)->weight <=
-                (ptr_current_edge_of_right)->weight)
+        if ((ptr_current_edge_of_left)->w <=
+                (ptr_current_edge_of_right)->w)
         {
             (ptr_current_edge)->ptr_next_edge = ptr_current_edge_of_left;
 

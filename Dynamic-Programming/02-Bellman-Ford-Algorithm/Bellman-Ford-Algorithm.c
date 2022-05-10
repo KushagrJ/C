@@ -1,4 +1,5 @@
-// To be tested.
+// The user must enter the edges assuming that vertex numbering begins from 1.
+// Internally, vertex numbering begins from 0.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,10 +10,15 @@
 typedef struct edge
 {
 
-    size_t end_vertex;
-    int weight;
+    // v is the vertex number of the end vertex of the edge corresponding to
+    // this edge object.
+    size_t v;
 
-    struct edge* next;
+    // w is the weight of the edge corresponding to this edge object.
+    int w;
+
+    // ptr_next_edge points to the next edge object in the singly linked list.
+    struct edge* ptr_next_edge;
 
 } Edge;
 
@@ -20,19 +26,24 @@ typedef struct edge
 typedef struct graph
 {
 
-    // e points to the adjacency list representation of the graph.
+    // e points to the adjacency list representation of the graph corresponding
+    // to this graph object.
     Edge** e;
 
-    // n is the number of vertices.
+    // n is the number of vertices in the graph corresponding to this graph
+    // object.
     size_t n;
 
-    // s is the source vertex.
+    // s is the vertex number of the source vertex in the graph corresponding
+    // to this graph object.
     size_t s;
 
-    // dist stores the shortest distance estimates from s to the other vertices.
+    // For the graph corresponding to this graph object, dist stores the
+    // shortest distance estimates from vertex s to the other vertices.
     int* dist;
 
-    // pre stores the shortest path predecessors of the vertices.
+    // For the graph corresponding to this graph object, pre stores shortest
+    // path predecessors of the vertices.
     size_t* pre;
 
 } Graph;
@@ -67,43 +78,49 @@ int main(void)
 void take_input_from_user_and_create_graph(Graph* ptr_g)
 {
 
+    size_t n;
     printf("Enter the number of vertices: ");
-    scanf("%zu", &((ptr_g)->n));
+    scanf("%zu", &n);
+    ((ptr_g)->n) = n;
 
-    printf("Enter the source vertex (vertex numbering begins from 0): ");
+    printf("Enter the source vertex (vertex numbering begins from 1): ");
     scanf("%zu", &((ptr_g)->s));
+    ((ptr_g)->s)--;
 
-    (ptr_g)->e = calloc((ptr_g)->n, sizeof (Edge*));
-    if ((ptr_g)->e == NULL)
+    Edge** e = calloc(n, sizeof (Edge*));
+    if (e == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
         exit(EXIT_FAILURE);
     }
+    ((ptr_g)->e) = e;
 
-    (ptr_g)->dist = malloc(((ptr_g)->n) * sizeof(int));
-    if ((ptr_g)->dist == NULL)
+    int* dist = malloc(n * sizeof(int));
+    if (dist == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
         exit(EXIT_FAILURE);
     }
+    ((ptr_g)->dist) = dist;
 
-    (ptr_g)->pre = malloc(((ptr_g)->n) * sizeof(size_t));
-    if ((ptr_g)->pre == NULL)
+    size_t* pre = malloc(n * sizeof(size_t));
+    if (pre == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
         exit(EXIT_FAILURE);
     }
+    ((ptr_g)->pre) = pre;
 
     printf("\nEnter edges (q to quit) :-\n");
-    printf("(0 2 5 means an edge from vertex 0 to vertex 2 of weight 5)\n\n");
+    printf("(1 2 5 means an edge from vertex 1 to vertex 2 of weight 5)\n\n");
 
     while (true)
     {
-        size_t start_vertex, end_vertex;
-        int weight;
+        size_t u, v;
+        int w;
 
         printf(">>> ");
-        if (scanf("%zu %zu %d", &(start_vertex),&(end_vertex),&(weight)) != 3)
+        if (scanf("%zu %zu %d", &u, &v, &w) != 3)
             break;
 
         Edge* ptr_current_edge = malloc(sizeof (Edge));
@@ -113,11 +130,11 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
             exit(EXIT_FAILURE);
         }
 
-        (ptr_current_edge)->end_vertex = end_vertex;
-        (ptr_current_edge)->weight = weight;
+        (ptr_current_edge)->v = (v - 1);
+        (ptr_current_edge)->w = w;
 
-        (ptr_current_edge)->next = ((ptr_g)->e)[start_vertex];
-        ((ptr_g)->e)[start_vertex] = ptr_current_edge;
+        (ptr_current_edge)->ptr_next_edge = e[u - 1];
+        e[u - 1] = ptr_current_edge;
     }
 
 }
@@ -154,17 +171,17 @@ bool bellman_ford(Graph* ptr_g)
 
             while (ptr_current_edge)
             {
-                size_t v = ((ptr_current_edge)->end_vertex);
-                int weight = ((ptr_current_edge)->weight);
+                size_t v = ((ptr_current_edge)->v);
+                int w = ((ptr_current_edge)->w);
 
                 if ((temp_dist[u] != INT_MAX) &&
-                        (temp_dist[v] > (temp_dist[u] + weight)))
+                       (temp_dist[v] > (temp_dist[u] + w)))
                 {
-                    dist[v] = (temp_dist[u] + weight);
+                    dist[v] = (temp_dist[u] + w);
                     pre[v] = u;
                 }
 
-                ptr_current_edge = ((ptr_current_edge)->next);
+                ptr_current_edge = ((ptr_current_edge)->ptr_next_edge);
             }
         }
 
@@ -179,16 +196,15 @@ bool bellman_ford(Graph* ptr_g)
 
         while (ptr_current_edge)
         {
-            size_t v = ((ptr_current_edge)->end_vertex);
-            int weight = ((ptr_current_edge)->weight);
+            size_t v = ((ptr_current_edge)->v);
+            int w = ((ptr_current_edge)->w);
 
-            if ((dist[u] != INT_MAX) &&
-                    (dist[v] > (dist[u] + weight)))
+            if ((dist[u] != INT_MAX) && (dist[v] > (dist[u] + w)))
             {
                 return false;
             }
 
-            ptr_current_edge = ((ptr_current_edge)->next);
+            ptr_current_edge = ((ptr_current_edge)->ptr_next_edge);
         }
     }
 
@@ -200,21 +216,26 @@ bool bellman_ford(Graph* ptr_g)
 void print_shortest_paths(Graph* ptr_g)
 {
 
+    size_t n = ((ptr_g)->n);
+    size_t s = ((ptr_g)->s);
+    int* dist = ((ptr_g)->dist);
+
     printf("\nShortest paths :-\n");
 
-    for (size_t t = 0; t < ((ptr_g)->n); t++)
+    for (size_t t = 0; t < n; t++)
     {
-        if (((ptr_g)->dist)[t] != INT_MAX)
+        if (dist[t] != INT_MAX)
         {
-            printf("%zu to %zu (shortest distance = %3d): ", (ptr_g)->s, t,
-                   ((ptr_g)->dist)[t]);
+            printf("%zu to %zu (shortest distance = %3d): ", (s + 1), (t + 1),
+                   dist[t]);
             print_shortest_path_from_s_to_t(ptr_g, t);
             putchar('\n');
         }
 
         else
         {
-            printf("%zu to %zu (shortest distance = N/A): N/A\n",(ptr_g)->s,t);
+            printf("%zu to %zu (shortest distance = N/A): N/A\n", (s + 1),
+                   (t + 1));
         }
     }
 
@@ -224,10 +245,13 @@ void print_shortest_paths(Graph* ptr_g)
 void print_shortest_path_from_s_to_t(Graph* ptr_g, size_t t)
 {
 
-    if ((ptr_g)->s != t)
-        print_shortest_path_from_s_to_t(ptr_g, ((ptr_g)->pre)[t]);
+    size_t s = ((ptr_g)->s);
+    size_t* pre = ((ptr_g)->pre);
 
-    printf("%zu ", t);
+    if (s != t)
+        print_shortest_path_from_s_to_t(ptr_g, pre[t]);
+
+    printf("%zu ", (t + 1));
 
 }
 
@@ -235,22 +259,26 @@ void print_shortest_path_from_s_to_t(Graph* ptr_g, size_t t)
 void free_graph(Graph* ptr_g)
 {
 
-    for (size_t i = 0; i < ((ptr_g)->n); i++)
+    Edge** e = ((ptr_g)->e);
+    size_t n = ((ptr_g)->n);
+    int* dist = ((ptr_g)->dist);
+    size_t* pre = ((ptr_g)->pre);
+
+    for (size_t i = 0; i < n; i++)
     {
-        Edge* ptr_current_edge = ((ptr_g)->e)[i];
+        Edge* ptr_current_edge = e[i];
 
         while (ptr_current_edge)
         {
-            Edge* temp = (ptr_current_edge)->next;
+            Edge* temp = (ptr_current_edge)->ptr_next_edge;
             free(ptr_current_edge);
             ptr_current_edge = temp;
         }
     }
 
-    free((ptr_g)->e);
-
-    free((ptr_g)->dist);
-    free((ptr_g)->pre);
+    free(e);
+    free(dist);
+    free(pre);
 
 }
 
