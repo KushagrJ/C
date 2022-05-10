@@ -126,36 +126,42 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
 bool bellman_ford(Graph* ptr_g)
 {
 
-    for (size_t t = 0; t < ((ptr_g)->n); t++)
-        ((ptr_g)->dist)[t] = INT_MAX;
-    ((ptr_g)->dist)[(ptr_g)->s] = 0;
+    Edge** e = ((ptr_g)->e);
+    size_t n = ((ptr_g)->n);
+    size_t s = ((ptr_g)->s);
+    int* dist = ((ptr_g)->dist);
+    size_t* pre = ((ptr_g)->pre);
 
-    for (size_t k = 1; k <= (((ptr_g)->n) - 1); k++)
+    for (size_t t = 0; t < n; t++)
+        dist[t] = INT_MAX;
+    dist[s] = 0;
+
+    for (size_t k = 1; k <= (n - 1); k++)
     {
-        int* dist = malloc(((ptr_g)->n) * sizeof (int));
-        if (dist == NULL)
+        int* temp_dist = malloc(n * sizeof (int));
+        if (temp_dist == NULL)
         {
             fprintf(stderr, "Unsuccessful allocation\n");
             exit(EXIT_FAILURE);
         }
 
-        for (size_t x = 0; x < ((ptr_g)->n); x++)
-            dist[x] = ((ptr_g)->dist)[x];
+        for (size_t x = 0; x < n; x++)
+            temp_dist[x] = dist[x];
 
-        for (size_t u = 0; u < ((ptr_g)->n); u++)
+        for (size_t u = 0; u < n; u++)
         {
-            Edge* ptr_current_edge = ((ptr_g)->e)[u];
+            Edge* ptr_current_edge = e[u];
 
             while (ptr_current_edge)
             {
                 size_t v = ((ptr_current_edge)->end_vertex);
                 int weight = ((ptr_current_edge)->weight);
 
-                if ((dist[u] != INT_MAX) &&
-                        (dist[v] > (dist[u] + weight)))
+                if ((temp_dist[u] != INT_MAX) &&
+                        (temp_dist[v] > (temp_dist[u] + weight)))
                 {
-                    ((ptr_g)->dist)[v] = (dist[u] + weight);
-                    ((ptr_g)->pre)[v] = u;
+                    dist[v] = (temp_dist[u] + weight);
+                    pre[v] = u;
                 }
 
                 ptr_current_edge = ((ptr_current_edge)->next);
@@ -164,20 +170,20 @@ bool bellman_ford(Graph* ptr_g)
 
         print_shortest_paths(ptr_g);
 
-        free(dist);
+        free(temp_dist);
     }
 
-    for (size_t u = 0; u < ((ptr_g)->n); u++)
+    for (size_t u = 0; u < n; u++)
     {
-        Edge* ptr_current_edge = ((ptr_g)->e)[u];
+        Edge* ptr_current_edge = e[u];
 
         while (ptr_current_edge)
         {
             size_t v = ((ptr_current_edge)->end_vertex);
             int weight = ((ptr_current_edge)->weight);
 
-            if ((((ptr_g)->dist)[u] != INT_MAX) &&
-                    (((ptr_g)->dist)[v] > (((ptr_g)->dist)[u] + weight)))
+            if ((dist[u] != INT_MAX) &&
+                    (dist[v] > (dist[u] + weight)))
             {
                 return false;
             }
