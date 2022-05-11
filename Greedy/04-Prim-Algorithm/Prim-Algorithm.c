@@ -60,6 +60,8 @@ int main(void)
     Graph g;
     take_input_from_user_and_create_graph(&g);
 
+    prim(&g);
+
     free_graph(&g);
 
     return 0;
@@ -223,7 +225,7 @@ void insert(Graph* ptr_g, unsigned x)
     int* key = ((ptr_g)->key);
     void** min_priority_queue = ((ptr_g)->min_priority_queue);
 
-    (*ptr_heap_size)--;
+    (*ptr_heap_size)++;
 
     int key_of_x = key[x];
     key[x] = INT_MAX;
