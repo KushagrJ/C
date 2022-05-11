@@ -5,20 +5,6 @@
 #include <time.h>
 
 
-typedef struct vertex
-{
-
-    unsigned x;
-
-    int key;
-
-    unsigned pre;
-
-    struct vertex** ptr_ptr_this_vertex;
-
-} Vertex;
-
-
 typedef struct edge
 {
 
@@ -38,9 +24,13 @@ typedef struct graph
 
     unsigned r;
 
-    Vertex* vertices;
+    void** vertices;
 
-    Vertex** min_priority_queue;
+    int* key;
+
+    unsigned* pre;
+
+    void** min_priority_queue;
 
     unsigned heap_size;
 
@@ -52,6 +42,8 @@ typedef struct graph
 void take_input_from_user_and_create_graph(Graph*);
 
 int rand_int(int, int);
+
+void prim(Graph*);
 
 // min priority queue operations.
 void insert(Graph*, unsigned);
@@ -86,7 +78,7 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     unsigned r = rand_int(0, (n - 1));
     ((ptr_g)->r) = r;
 
-    Vertex* vertices = malloc(n * sizeof (Vertex));
+    void** vertices = malloc(n * sizeof (void*));
     if (vertices == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
@@ -94,11 +86,23 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     }
     ((ptr_g)->vertices) = vertices;
 
-    for (unsigned x = 0; x < n; x++)
-        (vertices[x]).key = INT_MAX;
-    (vertices[r]).key = 0;
+    int* key = malloc(n * sizeof (int));
+    if (key == NULL)
+    {
+        fprintf(stderr, "Unsuccessful allocation\n");
+        exit(EXIT_FAILURE);
+    }
+    ((ptr_g)->key) = key;
 
-    Vertex** min_priority_queue = malloc(n * sizeof (Vertex*));
+    unsigned* pre = malloc(n * sizeof (unsigned));
+    if (pre == NULL)
+    {
+        fprintf(stderr, "Unsuccessful allocation\n");
+        exit(EXIT_FAILURE);
+    }
+    ((ptr_g)->pre) = pre;
+
+    void** min_priority_queue = malloc(n * sizeof (void*));
     if (min_priority_queue == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
@@ -107,9 +111,6 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     ((ptr_g)->min_priority_queue) = min_priority_queue;
 
     ((ptr_g)->heap_size) = 0;
-
-    for (unsigned x = 0; x < n; x++)
-        insert(ptr_g, x);
 
     Edge** e = calloc(n, sizeof (Edge*));
     if (e == NULL)
@@ -120,7 +121,8 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     ((ptr_g)->e) = e;
 
     printf("\nEnter edges (q to quit) :-\n");
-    printf("(1 2 5 means an edge from vertex 1 to vertex 2 of weight 5)\n\n");
+    printf("(1 2 5 means an edge between vertices 1 and 2 of weight 5)\n");
+    printf("(Don't enter self-loops and parallel edges)\n\n");
 
     while (true)
     {
@@ -131,18 +133,33 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
         if (scanf("%u %u %d", &u, &v, &w) != 3)
             break;
 
-        Edge* ptr_current_edge = malloc(sizeof (Edge));
-        if (ptr_current_edge == NULL)
+        // current_edge_1 is directed from u to v.
+        Edge* ptr_current_edge_1 = malloc(sizeof (Edge));
+        if (ptr_current_edge_1 == NULL)
         {
             fprintf(stderr, "Unsuccessful allocation\n");
             exit(EXIT_FAILURE);
         }
 
-        (ptr_current_edge)->v = (v - 1);
-        (ptr_current_edge)->w = w;
+        ((ptr_current_edge_1)->v) = (v - 1);
+        ((ptr_current_edge_1)->w) = w;
 
-        (ptr_current_edge)->ptr_next_edge = e[u - 1];
-        e[u - 1] = ptr_current_edge;
+        ((ptr_current_edge_1)->ptr_next_edge) = e[u - 1];
+        e[u - 1] = ptr_current_edge_1;
+
+        // current_edge_2 is directed from v to u.
+        Edge* ptr_current_edge_2 = malloc(sizeof (Edge));
+        if (ptr_current_edge_2 == NULL)
+        {
+            fprintf(stderr, "Unsuccessful allocation\n");
+            exit(EXIT_FAILURE);
+        }
+
+        ((ptr_current_edge_2)->v) = (u - 1);
+        ((ptr_current_edge_2)->w) = w;
+
+        ((ptr_current_edge_2)->ptr_next_edge) = e[v - 1];
+        e[v - 1] = ptr_current_edge_2;
     }
 
 }
@@ -167,66 +184,92 @@ int rand_int(int a, int b)
 }
 
 
+void prim(Graph* ptr_g)
+{
+
+    // Remove all redundant variable definitions.
+    unsigned n = ((ptr_g)->n);
+    unsigned r = ((ptr_g)->r);
+    void** vertices = ((ptr_g)->vertices);
+    int* key = ((ptr_g)->key);
+    unsigned* pre = ((ptr_g)->pre);
+    void** min_priority_queue = ((ptr_g)->min_priority_queue);
+    unsigned heap_size = ((ptr_g)->heap_size);
+    Edge** e = ((ptr_g)->e);
+
+    for (unsigned x = 0; x < n; x++)
+        key[x] = INT_MAX;
+    key[r] = 0;
+
+    for (unsigned x = 0; x < n; x++)
+        insert(ptr_g, x);
+
+}
+
+
 void insert(Graph* ptr_g, unsigned x)
 {
 
-    unsigned heap_size = ((ptr_g)->heap_size);
+    unsigned n = ((ptr_g)->n);
+    unsigned* ptr_heap_size = &((ptr_g)->heap_size);
 
-    if (heap_size == (ptr_g)->n)
+    if (*ptr_heap_size == n)
     {
         fprintf(stderr, "Heap overflow\n");
         exit(EXIT_FAILURE);
     }
 
-    Vertex** min_priority_queue = ((ptr_g)->min_priority_queue);
-    Vertex* vertices = ((ptr_g)->vertices);
+    void** vertices = ((ptr_g)->vertices);
+    int* key = ((ptr_g)->key);
+    void** min_priority_queue = ((ptr_g)->min_priority_queue);
 
-    int key = (vertices[x]).key;
-    (vertices[x]).key = INT_MAX;
+    (*ptr_heap_size)--;
 
-    min_priority_queue[heap_size] = (vertices + x);
-    (vertices[x]).ptr_ptr_this_vertex = (min_priority_queue + heap_size);
+    int key_of_x = key[x];
+    key[x] = INT_MAX;
 
-    decrease_key(ptr_g, x, key);
+    vertices[x] = (void*) (min_priority_queue + (*ptr_heap_size - 1));
+    min_priority_queue[*ptr_heap_size - 1] = (void*) (vertices + x);
 
-    ((ptr_g)->heap_size)++;
+    decrease_key(ptr_g, x, key_of_x);
 
 }
 
 
-void decrease_key(Graph* ptr_g, unsigned x, int key)
+void decrease_key(Graph* ptr_g, unsigned x, int key_of_x)
 {
 
-    Vertex** min_priority_queue = ((ptr_g)->min_priority_queue);
-    Vertex* vertices = ((ptr_g)->vertices);
+    int* key = ((ptr_g)->key);
 
-    if (key > (vertices[x]).key)
+    if (key_of_x > key[x])
     {
         fprintf(stderr, "New key is greater than current key\n");
         exit(EXIT_FAILURE);
     }
 
-    (vertices[x]).key = key;
+    void** vertices = ((ptr_g)->vertices);
+    void** min_priority_queue = ((ptr_g)->min_priority_queue);
 
-    unsigned index = (((vertices[x]).ptr_ptr_this_vertex) - min_priority_queue);
+    key[x] = key_of_x;
 
     // This is the min heap's swim-up procedure.
+
+    unsigned index = ((void**) (vertices[x]) - min_priority_queue);
+
     while (index > 0)
     {
         unsigned parent_index = ((index - 1) / 2);
 
-        if (((min_priority_queue[index])->key) <
-               ((min_priority_queue[parent_index])->key))
+        unsigned parent_x =
+            ((void**) (min_priority_queue[parent_index]) - vertices);
+
+        if (key[x] < key[parent_x])
         {
-            Vertex* temp = min_priority_queue[index];
-            min_priority_queue[index] = min_priority_queue[parent_index];
-            min_priority_queue[parent_index] = temp;
+            vertices[parent_x] = ((void*) (min_priority_queue + index));
+            min_priority_queue[index] = ((void*) (vertices + parent_x));
 
-            (min_priority_queue[index])->ptr_ptr_this_vertex =
-                (min_priority_queue + index);
-
-            (min_priority_queue[parent_index])->ptr_ptr_this_vertex =
-                (min_priority_queue + parent_index);
+            vertices[x] = ((void*) (min_priority_queue + parent_index));
+            min_priority_queue[parent_index] = ((void*) (vertices + x));
 
             index = parent_index;
         }
@@ -243,11 +286,13 @@ void decrease_key(Graph* ptr_g, unsigned x, int key)
 void free_graph(Graph* ptr_g)
 {
 
-    free((ptr_g)->vertices);
-    free((ptr_g)->min_priority_queue);
-
     unsigned n = ((ptr_g)->n);
     Edge** e = ((ptr_g)->e);
+
+    free((ptr_g)->vertices);
+    free((ptr_g)->key);
+    free((ptr_g)->pre);
+    free((ptr_g)->min_priority_queue);
 
     for (unsigned i = 0; i < n; i++)
     {
