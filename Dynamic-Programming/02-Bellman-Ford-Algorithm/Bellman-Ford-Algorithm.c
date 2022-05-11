@@ -1,9 +1,6 @@
 // The user must enter the edges assuming that vertex numbering begins from 1.
 // Internally, vertex numbering begins from 0.
 
-// Instead of taking dist and pre as attributes of the vertices, separate arrays
-// have been used, since vertex objects aren't required in this program.
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
