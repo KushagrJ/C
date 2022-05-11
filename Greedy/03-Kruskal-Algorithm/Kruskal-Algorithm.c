@@ -40,8 +40,8 @@ typedef struct graph
 
     // For the graph corresponding to this graph object, vertices stores void*
     // objects (representing vertex objects, sort of) such that the index of
-    // every void* object is the corresponding vertex number, and every object
-    // points to its parent object in the rooted tree.
+    // every object is the corresponding vertex number, and every object points
+    // to its parent object in the rooted tree.
     void** vertices;
 
     // ptr_head_edge points to the head edge object in the singly linked list.
