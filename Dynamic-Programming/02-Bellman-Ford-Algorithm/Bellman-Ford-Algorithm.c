@@ -353,7 +353,7 @@ void free_graph(Graph* ptr_g)
        According to the above definition of the value of an optimal solution,
        to calculate dist_k[t], the values from dist_(k-1) are needed multiple
        times, and the same values from dist_(k-1) are used multiple times to
-       calculate dist_k[t] for different values of [t].
+       calculate dist_k[t] for different values of t.
 
        To help construct an optimal solution during step 4, let pre[t] be the
        predecessor vertex of t in the corresponding shortest path.
