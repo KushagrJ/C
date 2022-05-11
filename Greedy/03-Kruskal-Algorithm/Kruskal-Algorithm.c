@@ -1,4 +1,4 @@
-// A disjoint set forest has been used for the vertex objects.
+// A disjoint set forest has been used for the vertices.
 
 // Incorporate 'Union by Rank' and 'Path Compression' before posting on
 // Code Review Stack Exchange.
@@ -13,19 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-
-typedef struct vertex
-{
-
-    // x is the vertex number of the vertex corresponding to this vertex object.
-    size_t x;
-
-    // ptr_parent_vertex points to the parent vertex object of this vertex
-    // object in the rooted tree.
-    struct vertex* ptr_parent_vertex;
-
-} Vertex;
 
 
 typedef struct edge
@@ -51,9 +38,11 @@ typedef struct graph
     // object.
     size_t n;
 
-    // For the graph corresponding to this graph object, vertices stores the
-    // vertex objects.
-    Vertex* vertices;
+    // For the graph corresponding to this graph object, vertices stores void*
+    // objects such the index of every void* object is the corresponding vertex
+    // number, and every void* object points to its parent object in the
+    // rooted tree.
+    void** vertices;
 
     // ptr_head_edge points to the head edge object in the singly linked list.
     Edge* ptr_head_edge;
@@ -99,7 +88,7 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     scanf("%zu", &n);
     ((ptr_g)->n) = n;
 
-    Vertex* vertices = malloc(n * sizeof (Vertex));
+    void** vertices = malloc(n * sizeof (void*));
     if (vertices == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
@@ -108,10 +97,7 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     ((ptr_g)->vertices) = vertices;
 
     for (size_t x = 0; x < n; x++)
-    {
-        (vertices[x]).x = x;
         make_set(ptr_g, x);
-    }
 
     printf("\nEnter edges (q to quit) :-\n");
     printf("(1 2 5 means an edge between vertices 1 and 2 of weight 5)\n");
@@ -177,20 +163,20 @@ void kruskal(Graph* ptr_g)
 
     while (ptr_current_edge)
     {
-        // root_u is the vertex number of the vertex corresponding to the root
-        // vertex object of the rooted tree containing that vertex's
-        // corresponding vertex object whose vertex number is u.
-        size_t root_u = find_set(ptr_g, (ptr_current_edge)->u);
+        size_t u = ((ptr_current_edge)->u);
+        size_t v = ((ptr_current_edge)->v);
 
-        // root_v is the vertex number of the vertex corresponding to the root
-        // vertex object of the rooted tree containing that vertex's
-        // corresponding vertex object whose vertex number is v.
-        size_t root_v = find_set(ptr_g, (ptr_current_edge)->v);
+        // root_u is the vertex number of the root vertex of the rooted tree
+        // containing vertex u.
+        size_t root_u = find_set(ptr_g, u);
+
+        // root_v is the vertex number of the root vertex of the rooted tree
+        // containing vertex v.
+        size_t root_v = find_set(ptr_g, v);
 
         if (root_u != root_v)
         {
-            printf("%zu %zu\n", ((ptr_current_edge)->u) + 1,
-                   ((ptr_current_edge)->v) + 1);
+            printf("%zu %zu\n", (u + 1), (v + 1));
 
             union_set(ptr_g, root_u, root_v);
         }
@@ -204,9 +190,9 @@ void kruskal(Graph* ptr_g)
 void make_set(Graph* ptr_g, size_t x)
 {
 
-    Vertex* vertices = ((ptr_g)->vertices);
+    void** vertices = ((ptr_g)->vertices);
 
-    (vertices[x]).ptr_parent_vertex = (vertices + x);
+    vertices[x] = (void*) (vertices + x);
 
 }
 
@@ -214,12 +200,14 @@ void make_set(Graph* ptr_g, size_t x)
 size_t find_set(Graph* ptr_g, size_t x)
 {
 
-    Vertex* ptr_current_vertex = ((ptr_g)->vertices + x);
+    void** vertices = ((ptr_g)->vertices);
 
-    while ((ptr_current_vertex)->ptr_parent_vertex != ptr_current_vertex)
-        ptr_current_vertex = ((ptr_current_vertex)->ptr_parent_vertex);
+    void** ptr_current_vertex = (vertices + x);
 
-    return (ptr_current_vertex)->x;
+    while (ptr_current_vertex != (void**) (*ptr_current_vertex))
+        ptr_current_vertex = (void**) (*ptr_current_vertex);
+
+    return (ptr_current_vertex - vertices);
 
 }
 
@@ -227,9 +215,9 @@ size_t find_set(Graph* ptr_g, size_t x)
 void union_set(Graph* ptr_g, size_t root_u, size_t root_v)
 {
 
-    Vertex* vertices = ((ptr_g)->vertices);
+    void** vertices = ((ptr_g)->vertices);
 
-    (vertices[root_u]).ptr_parent_vertex = (vertices + root_v);
+    vertices[root_u] = (void*) (vertices + root_v);
 
 }
 
