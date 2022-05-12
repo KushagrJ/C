@@ -132,7 +132,7 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
         unsigned u, v;
         int w;
 
-        printf(">>> ");
+        // printf(">>> ");
         if (scanf("%u %u %d", &u, &v, &w) != 3)
             break;
 
@@ -190,14 +190,12 @@ int rand_int(int a, int b)
 void prim(Graph* ptr_g)
 {
 
-    // Remove all redundant variable definitions.
-/**/    unsigned n = ((ptr_g)->n);
-/**/    unsigned r = ((ptr_g)->r);
+    unsigned n = ((ptr_g)->n);
+    unsigned r = ((ptr_g)->r);
     void** vertices = ((ptr_g)->vertices);
-/**/    int* key = ((ptr_g)->key);
+    int* key = ((ptr_g)->key);
     unsigned* pre = ((ptr_g)->pre);
-    void** min_priority_queue = ((ptr_g)->min_priority_queue);
-    unsigned heap_size = ((ptr_g)->heap_size);
+    unsigned* ptr_heap_size = &((ptr_g)->heap_size);
     Edge** e = ((ptr_g)->e);
 
     for (unsigned x = 0; x < n; x++)
@@ -206,6 +204,35 @@ void prim(Graph* ptr_g)
 
     for (unsigned x = 0; x < n; x++)
         insert(ptr_g, x);
+
+    while (*ptr_heap_size > 0)
+    {
+        unsigned u = extract_min(ptr_g);
+
+        Edge* ptr_current_edge = e[u];
+
+        while (ptr_current_edge)
+        {
+            unsigned v = ((ptr_current_edge)->v);
+            int w = ((ptr_current_edge)->w);
+
+            if ((vertices[v] != NULL) && (w < key[v]))
+            {
+                key[v] = w;
+                pre[v] = u;
+
+                decrease_key(ptr_g, v, w);
+            }
+
+            ptr_current_edge = ((ptr_current_edge)->ptr_next_edge);
+        }
+    }
+
+    printf("\nThe edges constituting an MST are :-\n\n");
+
+    for (unsigned x = 0; x < n; x++)
+        if (x != r)
+            printf("%u %u\n", (x + 1), (pre[x] + 1));
 
 }
 
@@ -311,8 +338,8 @@ unsigned extract_min(Graph* ptr_g)
 
     // This is the min heap's sift-down procedure.
 
-    unsigned parent_x = (((void**) (min_priority_queue[0])) - vertices);
     unsigned parent_index = 0;
+    unsigned parent_x = (((void**) (min_priority_queue[0])) - vertices);
 
     while (true)
     {
@@ -324,33 +351,33 @@ unsigned extract_min(Graph* ptr_g)
         unsigned right_child_x =
             (((void**) (min_priority_queue[right_child_index])) - vertices);
 
-        unsigned largest_index = parent_index;
-        unsigned largest_x = parent_x;
+        unsigned smallest_index = parent_index;
+        unsigned smallest_x = parent_x;
 
         if ((left_child_index < *ptr_heap_size) &&
-               (key[left_child_x] < key[largest_x]))
+               (key[left_child_x] < key[smallest_x]))
         {
-            largest_index = left_child_index;
-            largest_x = left_child_x;
+            smallest_index = left_child_index;
+            smallest_x = left_child_x;
         }
 
         if ((right_child_index < *ptr_heap_size) &&
-               (key[right_child_x] < key[largest_x]))
+               (key[right_child_x] < key[smallest_x]))
         {
-            largest_index = right_child_index;
-            largest_x = right_child_x;
+            smallest_index = right_child_index;
+            smallest_x = right_child_x;
         }
 
-        if (largest_index == parent_index)
+        if (smallest_index == parent_index)
             break;
 
-        vertices[parent_x] = ((void*) (min_priority_queue + largest_index));
-        min_priority_queue[largest_index] = ((void*) (vertices + parent_x));
+        vertices[parent_x] = ((void*) (min_priority_queue + smallest_index));
+        min_priority_queue[smallest_index] = ((void*) (vertices + parent_x));
 
-        vertices[largest_x] = ((void*) (min_priority_queue + parent_index));
-        min_priority_queue[parent_index] = ((void*) (vertices + largest_x));
+        vertices[smallest_x] = ((void*) (min_priority_queue + parent_index));
+        min_priority_queue[parent_index] = ((void*) (vertices + smallest_x));
 
-        parent_index = largest_index;
+        parent_index = smallest_index;
     }
 
     return min_x;
