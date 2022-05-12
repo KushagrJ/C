@@ -48,6 +48,7 @@ void prim(Graph*);
 // min priority queue operations.
 void insert(Graph*, unsigned);
 void decrease_key(Graph*, unsigned, int);
+unsigned extract_min(Graph*);
 
 void free_graph(Graph*);
 
@@ -190,10 +191,10 @@ void prim(Graph* ptr_g)
 {
 
     // Remove all redundant variable definitions.
-    unsigned n = ((ptr_g)->n);
-    unsigned r = ((ptr_g)->r);
+/**/    unsigned n = ((ptr_g)->n);
+/**/    unsigned r = ((ptr_g)->r);
     void** vertices = ((ptr_g)->vertices);
-    int* key = ((ptr_g)->key);
+/**/    int* key = ((ptr_g)->key);
     unsigned* pre = ((ptr_g)->pre);
     void** min_priority_queue = ((ptr_g)->min_priority_queue);
     unsigned heap_size = ((ptr_g)->heap_size);
@@ -215,7 +216,7 @@ void insert(Graph* ptr_g, unsigned x)
     unsigned n = ((ptr_g)->n);
     unsigned* ptr_heap_size = &((ptr_g)->heap_size);
 
-    if (*ptr_heap_size == n)
+    if (*ptr_heap_size >= n)
     {
         fprintf(stderr, "Heap overflow\n");
         exit(EXIT_FAILURE);
@@ -227,23 +228,23 @@ void insert(Graph* ptr_g, unsigned x)
 
     (*ptr_heap_size)++;
 
-    int key_of_x = key[x];
+    int new_key_of_x = key[x];
     key[x] = INT_MAX;
 
     vertices[x] = (void*) (min_priority_queue + (*ptr_heap_size - 1));
     min_priority_queue[*ptr_heap_size - 1] = (void*) (vertices + x);
 
-    decrease_key(ptr_g, x, key_of_x);
+    decrease_key(ptr_g, x, new_key_of_x);
 
 }
 
 
-void decrease_key(Graph* ptr_g, unsigned x, int key_of_x)
+void decrease_key(Graph* ptr_g, unsigned x, int new_key_of_x)
 {
 
     int* key = ((ptr_g)->key);
 
-    if (key_of_x > key[x])
+    if (new_key_of_x > key[x])
     {
         fprintf(stderr, "New key is greater than current key\n");
         exit(EXIT_FAILURE);
@@ -252,18 +253,18 @@ void decrease_key(Graph* ptr_g, unsigned x, int key_of_x)
     void** vertices = ((ptr_g)->vertices);
     void** min_priority_queue = ((ptr_g)->min_priority_queue);
 
-    key[x] = key_of_x;
+    key[x] = new_key_of_x;
 
     // This is the min heap's swim-up procedure.
 
-    unsigned index = ((void**) (vertices[x]) - min_priority_queue);
+    unsigned index = (((void**) (vertices[x])) - min_priority_queue);
 
     while (index > 0)
     {
         unsigned parent_index = ((index - 1) / 2);
 
         unsigned parent_x =
-            ((void**) (min_priority_queue[parent_index]) - vertices);
+            (((void**) (min_priority_queue[parent_index])) - vertices);
 
         if (key[x] < key[parent_x])
         {
@@ -281,6 +282,78 @@ void decrease_key(Graph* ptr_g, unsigned x, int key_of_x)
             break;
         }
     }
+
+}
+
+
+unsigned extract_min(Graph* ptr_g)
+{
+
+    unsigned* ptr_heap_size = &((ptr_g)->heap_size);
+
+    if (*ptr_heap_size < 1)
+    {
+        fprintf(stderr, "Heap underflow\n");
+        exit(EXIT_FAILURE);
+    }
+
+    void** vertices = ((ptr_g)->vertices);
+    int* key = ((ptr_g)->key);
+    void** min_priority_queue = ((ptr_g)->min_priority_queue);
+
+    (*ptr_heap_size)--;
+
+    unsigned min_x = (((void**) (min_priority_queue[0])) - vertices);
+    vertices[min_x] = NULL;
+
+    min_priority_queue[0] = min_priority_queue[*ptr_heap_size];
+    *((void**) (min_priority_queue[0])) = ((void*) (min_priority_queue));
+
+    // This is the min heap's sift-down procedure.
+
+    unsigned parent_x = (((void**) (min_priority_queue[0])) - vertices);
+    unsigned parent_index = 0;
+
+    while (true)
+    {
+        unsigned left_child_index = ((2 * parent_index) + 1);
+        unsigned left_child_x =
+            (((void**) (min_priority_queue[left_child_index])) - vertices);
+
+        unsigned right_child_index = ((2 * parent_index) + 2);
+        unsigned right_child_x =
+            (((void**) (min_priority_queue[right_child_index])) - vertices);
+
+        unsigned largest_index = parent_index;
+        unsigned largest_x = parent_x;
+
+        if ((left_child_index < *ptr_heap_size) &&
+               (key[left_child_x] < key[largest_x]))
+        {
+            largest_index = left_child_index;
+            largest_x = left_child_x;
+        }
+
+        if ((right_child_index < *ptr_heap_size) &&
+               (key[right_child_x] < key[largest_x]))
+        {
+            largest_index = right_child_index;
+            largest_x = right_child_x;
+        }
+
+        if (largest_index == parent_index)
+            break;
+
+        vertices[parent_x] = ((void*) (min_priority_queue + largest_index));
+        min_priority_queue[largest_index] = ((void*) (vertices + parent_x));
+
+        vertices[largest_x] = ((void*) (min_priority_queue + parent_index));
+        min_priority_queue[parent_index] = ((void*) (vertices + largest_x));
+
+        parent_index = largest_index;
+    }
+
+    return min_x;
 
 }
 
