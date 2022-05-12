@@ -1,3 +1,5 @@
+// To be tested properly.
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -78,8 +80,9 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     scanf("%u", &n);
     ((ptr_g)->n) = n;
 
-    unsigned r = rand_int(0, (n - 1));
+    unsigned r = 0;// rand_int(0, (n - 1));
     ((ptr_g)->r) = r;
+    printf("\nValue of r = %d\n", r);
 
     void** vertices = malloc(n * sizeof (void*));
     if (vertices == NULL)
@@ -285,6 +288,8 @@ void decrease_key(Graph* ptr_g, unsigned x, int new_key_of_x)
     // This is the min heap's swim-up procedure.
 
     unsigned index = (((void**) (vertices[x])) - min_priority_queue);
+
+    printf("\nIndex = %d\n", index);
 
     while (index > 0)
     {
