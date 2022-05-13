@@ -1,5 +1,22 @@
 // To be tested properly.
 
+/*
+
+1 4 1
+5 6 3
+2 3 2
+4 5 4
+1 6 3
+3 4 2
+1 2 1
+2 5 4
+4 6 5
+1 5 3
+1 3 4
+q
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -80,9 +97,9 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     scanf("%u", &n);
     ((ptr_g)->n) = n;
 
-    unsigned r = 0;// rand_int(0, (n - 1));
+    unsigned r = rand_int(0, (n - 1));
     ((ptr_g)->r) = r;
-    printf("\nValue of r = %d\n", r);
+    printf("\nChosen root vertex = %d\n", (r + 1));
 
     void** vertices = malloc(n * sizeof (void*));
     if (vertices == NULL)
@@ -235,7 +252,7 @@ void prim(Graph* ptr_g)
 
     for (unsigned x = 0; x < n; x++)
         if (x != r)
-            printf("%u %u\n", (x + 1), (pre[x] + 1));
+            printf("%u %u\n", (pre[x] + 1), (x + 1));
 
 }
 
@@ -286,10 +303,9 @@ void decrease_key(Graph* ptr_g, unsigned x, int new_key_of_x)
     key[x] = new_key_of_x;
 
     // This is the min heap's swim-up procedure.
+    // x is the vertex number and index is the index of vertex x in the heap.
 
     unsigned index = (((void**) (vertices[x])) - min_priority_queue);
-
-    printf("\nIndex = %d\n", index);
 
     while (index > 0)
     {
@@ -333,56 +349,59 @@ unsigned extract_min(Graph* ptr_g)
     int* key = ((ptr_g)->key);
     void** min_priority_queue = ((ptr_g)->min_priority_queue);
 
-    (*ptr_heap_size)--;
-
     unsigned min_x = (((void**) (min_priority_queue[0])) - vertices);
     vertices[min_x] = NULL;
 
-    min_priority_queue[0] = min_priority_queue[*ptr_heap_size];
-    *((void**) (min_priority_queue[0])) = ((void*) (min_priority_queue));
+    (*ptr_heap_size)--;
 
     // This is the min heap's sift-down procedure.
+    // x is the vertex number and index is the index of vertex x in the heap.
 
-    unsigned parent_index = 0;
-    unsigned parent_x = (((void**) (min_priority_queue[0])) - vertices);
+    unsigned x = (((void**) (min_priority_queue[*ptr_heap_size])) - vertices);
+    unsigned index = 0;
+
+    vertices[x] = ((void*) min_priority_queue);
+    min_priority_queue[0] = ((void*) (vertices + x));
 
     while (true)
     {
-        unsigned left_child_index = ((2 * parent_index) + 1);
+        unsigned left_child_index = ((2 * index) + 1);
+        if (left_child_index >= *ptr_heap_size)
+            break;
         unsigned left_child_x =
             (((void**) (min_priority_queue[left_child_index])) - vertices);
 
-        unsigned right_child_index = ((2 * parent_index) + 2);
+        unsigned right_child_index = ((2 * index) + 2);
+        if (right_child_index >= *ptr_heap_size)
+            break;
         unsigned right_child_x =
             (((void**) (min_priority_queue[right_child_index])) - vertices);
 
-        unsigned smallest_index = parent_index;
-        unsigned smallest_x = parent_x;
+        unsigned smallest_index = index;
+        unsigned smallest_x = x;
 
-        if ((left_child_index < *ptr_heap_size) &&
-               (key[left_child_x] < key[smallest_x]))
+        if (key[left_child_x] < key[smallest_x])
         {
             smallest_index = left_child_index;
             smallest_x = left_child_x;
         }
 
-        if ((right_child_index < *ptr_heap_size) &&
-               (key[right_child_x] < key[smallest_x]))
+        if (key[right_child_x] < key[smallest_x])
         {
             smallest_index = right_child_index;
             smallest_x = right_child_x;
         }
 
-        if (smallest_index == parent_index)
+        if (smallest_index == index)
             break;
 
-        vertices[parent_x] = ((void*) (min_priority_queue + smallest_index));
-        min_priority_queue[smallest_index] = ((void*) (vertices + parent_x));
+        vertices[x] = ((void*) (min_priority_queue + smallest_index));
+        min_priority_queue[smallest_index] = ((void*) (vertices + x));
 
-        vertices[smallest_x] = ((void*) (min_priority_queue + parent_index));
-        min_priority_queue[parent_index] = ((void*) (vertices + smallest_x));
+        vertices[smallest_x] = ((void*) (min_priority_queue + index));
+        min_priority_queue[index] = ((void*) (vertices + smallest_x));
 
-        parent_index = smallest_index;
+        index = smallest_index;
     }
 
     return min_x;
@@ -416,3 +435,47 @@ void free_graph(Graph* ptr_g)
     free(e);
 
 }
+
+
+
+
+
+/*
+
+ * Min-Heap :- (Similar discussion applies to Max-Heaps)
+
+   The procedures sift_up() and sift_down() assume that the object being sifted
+   up/down is the only object in the entire heap which potentially violates the
+   heap property.
+
+   In heap sort, when the heap is inititally being built during build_heap(), in
+   every iteration, only a part of the array is considered to be a heap, i.e.
+   the object being sifted down alongwith all of its children, grandchildren,
+   great-grandchildren, etc.
+   Since the heap is built from the bottom level to the top level, therefore by
+   the time an object from an upper level is sifted down, all lower levels will
+   have already formed a heap, making that object the only one potentially
+   violating the heap property in the heap formed by that object alongwith all
+   of its children, grandchildren, great-grandchildren, etc.
+
+   The procedure decrease_key() in a min-heap uses sift_up(), and the procedure
+   increase_key() in a min-heap uses sift_down().
+
+   The procedure insert() in a min-heap
+   (1) adds the object as the new last element in the array,
+   (2) sets the object's key to +inf, and
+   (3) uses decrease_key() with the desired key.
+   [Setting the object's key initially to +inf may seem redundant, but it is
+    necessary, as the decrease_key() procedure usually makes sure that the
+    new key less than or equal to the current key.
+    In order to pass this condition, the current key should be set to +inf.]
+
+   The procedure extract_min() in a min-heap
+   (1) returns the object which is the first element in the array,
+   (2) takes the object which is the last element in the array and makes it the
+       first element in the array,
+   (3) decreases the size of the array by 1, and
+   (4) either (i) 'sets the object's key to -inf and uses increase_key() with
+       the desired key', or (ii) 'directly uses sift_down()'.
+
+ */
