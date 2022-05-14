@@ -162,8 +162,8 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
 
 
  * Problems which have the overlapping subproblems property, but not the optimal
-   substructure property, cannot be solved using dynamic programming, and need
-   to be solved using divide-and-conquer.
+   substructure property, are technically not examples of dynamic programming,
+   and are actually examples of divide-and-conquer.
 
  * For eg., the problem of finding the n-th fibonacci number (n >= 1) can be
    solved in many different ways using divide-and-conquer :-
