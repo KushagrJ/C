@@ -476,6 +476,6 @@ void free_graph(Graph* ptr_g)
        first element in the array,
    (3) decreases the size of the array by 1, and
    (4) either (i) 'sets the object's key to -inf and uses increase_key() with
-       the desired key', or (ii) 'directly uses sift_down()'.
+       the original key', or (ii) 'directly uses sift_down()'.
 
  */
