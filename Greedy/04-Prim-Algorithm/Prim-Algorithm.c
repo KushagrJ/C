@@ -101,7 +101,7 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     ((ptr_g)->r) = r;
     printf("\nChosen root vertex = %d\n", (r + 1));
 
-    void** vertices = malloc(n * sizeof (void*));
+    void** vertices = calloc(n, sizeof (void*));
     if (vertices == NULL)
     {
         fprintf(stderr, "Unsuccessful allocation\n");
@@ -167,8 +167,8 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
         ((ptr_current_edge_1)->v) = (v - 1);
         ((ptr_current_edge_1)->w) = w;
 
-        ((ptr_current_edge_1)->ptr_next_edge) = e[u - 1];
-        e[u - 1] = ptr_current_edge_1;
+        ((ptr_current_edge_1)->ptr_next_edge) = (e[u - 1]);
+        (e[u - 1]) = ptr_current_edge_1;
 
         // current_edge_2 is directed from v to u.
         Edge* ptr_current_edge_2 = malloc(sizeof (Edge));
@@ -181,8 +181,8 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
         ((ptr_current_edge_2)->v) = (u - 1);
         ((ptr_current_edge_2)->w) = w;
 
-        ((ptr_current_edge_2)->ptr_next_edge) = e[v - 1];
-        e[v - 1] = ptr_current_edge_2;
+        ((ptr_current_edge_2)->ptr_next_edge) = (e[v - 1]);
+        (e[v - 1]) = ptr_current_edge_2;
     }
 
 }
@@ -219,8 +219,8 @@ void prim(Graph* ptr_g)
     Edge** e = ((ptr_g)->e);
 
     for (unsigned x = 0; x < n; x++)
-        key[x] = INT_MAX;
-    key[r] = 0;
+        (key[x]) = INT_MAX;
+    (key[r]) = 0;
 
     for (unsigned x = 0; x < n; x++)
         insert(ptr_g, x);
@@ -229,17 +229,17 @@ void prim(Graph* ptr_g)
     {
         unsigned u = extract_min(ptr_g);
 
-        Edge* ptr_current_edge = e[u];
+        Edge* ptr_current_edge = (e[u]);
 
         while (ptr_current_edge)
         {
             unsigned v = ((ptr_current_edge)->v);
             int w = ((ptr_current_edge)->w);
 
-            if ((vertices[v] != NULL) && (w < key[v]))
+            if (((vertices[v]) != NULL) && (w < (key[v])))
             {
-                key[v] = w;
-                pre[v] = u;
+                (key[v]) = w;
+                (pre[v]) = u;
 
                 decrease_key(ptr_g, v, w);
             }
@@ -252,7 +252,7 @@ void prim(Graph* ptr_g)
 
     for (unsigned x = 0; x < n; x++)
         if (x != r)
-            printf("%u %u\n", (pre[x] + 1), (x + 1));
+            printf("%u %u\n", ((pre[x]) + 1), (x + 1));
 
 }
 
@@ -261,7 +261,7 @@ void insert(Graph* ptr_g, unsigned x)
 {
 
     unsigned n = ((ptr_g)->n);
-    unsigned* ptr_heap_size = &((ptr_g)->heap_size);
+    unsigned* ptr_heap_size = (&((ptr_g)->heap_size));
 
     if (*ptr_heap_size >= n)
     {
@@ -275,11 +275,11 @@ void insert(Graph* ptr_g, unsigned x)
 
     (*ptr_heap_size)++;
 
-    int new_key_of_x = key[x];
-    key[x] = INT_MAX;
+    int new_key_of_x = (key[x]);
+    (key[x]) = INT_MAX;
 
-    vertices[x] = (void*) (min_priority_queue + (*ptr_heap_size - 1));
-    min_priority_queue[*ptr_heap_size - 1] = (void*) (vertices + x);
+    (vertices[x]) = ((void*) (min_priority_queue + (*ptr_heap_size - 1)));
+    (min_priority_queue[*ptr_heap_size - 1]) = ((void*) (vertices + x));
 
     decrease_key(ptr_g, x, new_key_of_x);
 
@@ -291,7 +291,7 @@ void decrease_key(Graph* ptr_g, unsigned x, int new_key_of_x)
 
     int* key = ((ptr_g)->key);
 
-    if (new_key_of_x > key[x])
+    if (new_key_of_x > (key[x]))
     {
         fprintf(stderr, "New key is greater than current key\n");
         exit(EXIT_FAILURE);
@@ -300,7 +300,7 @@ void decrease_key(Graph* ptr_g, unsigned x, int new_key_of_x)
     void** vertices = ((ptr_g)->vertices);
     void** min_priority_queue = ((ptr_g)->min_priority_queue);
 
-    key[x] = new_key_of_x;
+    (key[x]) = new_key_of_x;
 
     // This is the min heap's swim-up procedure.
     // x is the vertex number and index is the index of vertex x in the heap.
@@ -314,13 +314,13 @@ void decrease_key(Graph* ptr_g, unsigned x, int new_key_of_x)
         unsigned parent_x =
             (((void**) (min_priority_queue[parent_index])) - vertices);
 
-        if (key[x] < key[parent_x])
+        if ((key[x]) < (key[parent_x]))
         {
-            vertices[parent_x] = ((void*) (min_priority_queue + index));
-            min_priority_queue[index] = ((void*) (vertices + parent_x));
+            (vertices[parent_x]) = ((void*) (min_priority_queue + index));
+            (min_priority_queue[index]) = ((void*) (vertices + parent_x));
 
-            vertices[x] = ((void*) (min_priority_queue + parent_index));
-            min_priority_queue[parent_index] = ((void*) (vertices + x));
+            (vertices[x]) = ((void*) (min_priority_queue + parent_index));
+            (min_priority_queue[parent_index]) = ((void*) (vertices + x));
 
             index = parent_index;
         }
@@ -337,7 +337,7 @@ void decrease_key(Graph* ptr_g, unsigned x, int new_key_of_x)
 unsigned extract_min(Graph* ptr_g)
 {
 
-    unsigned* ptr_heap_size = &((ptr_g)->heap_size);
+    unsigned* ptr_heap_size = (&((ptr_g)->heap_size));
 
     if (*ptr_heap_size < 1)
     {
@@ -350,7 +350,7 @@ unsigned extract_min(Graph* ptr_g)
     void** min_priority_queue = ((ptr_g)->min_priority_queue);
 
     unsigned min_x = (((void**) (min_priority_queue[0])) - vertices);
-    vertices[min_x] = NULL;
+    (vertices[min_x]) = NULL;
 
     (*ptr_heap_size)--;
 
@@ -360,8 +360,8 @@ unsigned extract_min(Graph* ptr_g)
     unsigned x = (((void**) (min_priority_queue[*ptr_heap_size])) - vertices);
     unsigned index = 0;
 
-    vertices[x] = ((void*) min_priority_queue);
-    min_priority_queue[0] = ((void*) (vertices + x));
+    (vertices[x]) = ((void*) min_priority_queue);
+    (min_priority_queue[0]) = ((void*) (vertices + x));
 
     while (true)
     {
@@ -380,13 +380,13 @@ unsigned extract_min(Graph* ptr_g)
         unsigned smallest_index = index;
         unsigned smallest_x = x;
 
-        if (key[left_child_x] < key[smallest_x])
+        if ((key[left_child_x]) < (key[smallest_x]))
         {
             smallest_index = left_child_index;
             smallest_x = left_child_x;
         }
 
-        if (key[right_child_x] < key[smallest_x])
+        if ((key[right_child_x]) < (key[smallest_x]))
         {
             smallest_index = right_child_index;
             smallest_x = right_child_x;
@@ -395,11 +395,11 @@ unsigned extract_min(Graph* ptr_g)
         if (smallest_index == index)
             break;
 
-        vertices[x] = ((void*) (min_priority_queue + smallest_index));
-        min_priority_queue[smallest_index] = ((void*) (vertices + x));
+        (vertices[x]) = ((void*) (min_priority_queue + smallest_index));
+        (min_priority_queue[smallest_index]) = ((void*) (vertices + x));
 
-        vertices[smallest_x] = ((void*) (min_priority_queue + index));
-        min_priority_queue[index] = ((void*) (vertices + smallest_x));
+        (vertices[smallest_x]) = ((void*) (min_priority_queue + index));
+        (min_priority_queue[index]) = ((void*) (vertices + smallest_x));
 
         index = smallest_index;
     }
