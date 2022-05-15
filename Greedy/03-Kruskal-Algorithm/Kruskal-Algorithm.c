@@ -114,7 +114,6 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     ((ptr_dummy_head_edge)->ptr_next_edge) = NULL;
 
     Edge* ptr_previous_edge = ptr_dummy_head_edge;
-    Edge* ptr_current_edge;
 
     while (true)
     {
@@ -125,7 +124,7 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
         if (scanf("%zu %zu %d", &u, &v, &w) != 3)
             break;
 
-        ptr_current_edge = malloc(sizeof (Edge));
+        Edge* ptr_current_edge = malloc(sizeof (Edge));
         if (ptr_current_edge == NULL)
         {
             fprintf(stderr, "Unsuccessful allocation\n");
