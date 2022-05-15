@@ -18,7 +18,7 @@
     So, for n = 3 and m = 2, no. of distinct ways = 3.
 
 
-    Solution :-
+    Solution (Divide-and-Conquer with Tabulation) :-
 
     Let ans[i] be the no. of distinct ways in which the person can climb to the
     i-th step, under the constraint that they can climb at most m steps at a
