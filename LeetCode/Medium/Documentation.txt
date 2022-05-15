@@ -25,8 +25,8 @@
     time.
     Thus, the solution to the problem is ans[n].
 
-    The base case is i = 0, for which ans[0] = 1, since there is only way to go
-    from step 0 to step 0 itself.
+    The base case is i = 0, for which ans[0] = 1, since for every value of m,
+    there is only way to go from the 0-th step to the 0-th step itself.
 
     Now, for every step i > 0,
         Since the person can climb at most m steps at a time,
