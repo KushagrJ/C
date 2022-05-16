@@ -404,6 +404,7 @@ unsigned extract_min(Graph* ptr_g)
         index = smallest_index;
     }
 
+
     return min_x;
 
 }
@@ -435,6 +436,121 @@ void free_graph(Graph* ptr_g)
     free(e);
 
 }
+
+
+
+
+
+/*
+
+ * The Prim's Algorithm (The Minimum Spanning Tree Problem) :-
+
+   Electronic circuit designs, such as the connections of logic gates on a
+   breadboard, often need to make the pins of several components electrically
+   equivalent by wiring them together.
+   To interconnect a set of n pins, the designer can use an arrangement of
+   (n - 1) wires, each connecting two pins.
+   Of all such arrangements, the one that uses the least amount of wire is
+   usually the most desirable.
+
+   This problem can be modelled using a weighted, connected and undirected graph
+   G = (V, E), where V is the set of pins, E is the set of all possible
+   interconnections between pairs of pins, and for each edge (u, v) belonging to
+   E, w(u, v) specifies the cost (amount of wire needed) to connect u and v.
+   The goal is to find a minimum spanning tree of this graph, i.e. a spanning
+   tree whose total weight is minimum among all possible spanning trees.
+
+   Given a weighted, connected and undirected graph G = (V, E) having no self
+   loops and no parallel edges, the Prim's algorithm produces a minimum spanning
+   tree of G.
+   [For a weighted, complete and undirected graph G, there are (|V| ^ (|V| - 2))
+    different possible spanning trees]
+
+   The optimal substructure property of this problem is as follows:
+   Suppose that after running some algorithm, it is found that a minimum
+   spanning tree of G is T.
+   Then, for every subtree T' of T, T' must be a minimum spanning tree of the
+   corresponding subgraph G' of G consisting of those vertices present in T' and
+   all edges of G between those vertices.
+
+   If this problem is solved using dynamic programming, then the overlapping
+   subproblems property of this problem is as follows :-
+   Every dynamic programming algorithm checking all possible spanning trees
+   will have to examine the same subtrees when trying to build different
+   spanning trees multiple times.
+   Solving the minimum spanning tree problem using dynamic programming is an
+   overkill, as the greedy approach results in much more efficient algorithms.
+
+
+   In the Prim's algorithm, a min-priority queue data structure (efficiently
+   implemented using a binary min-heap) is maintained whose elements are the
+   vertices belonging to the given graph.
+   At the beginning, an arbitrary vertex r is selected to be the root vertex of
+   the tree growing in every iteration to become an MST by the time the
+   algorithm ends.
+   For every vertex u, u.key is the minimum weight of any edge connecting u to a
+   vertex in the growing tree, and u.pre is the parent vertex of u.
+   Hence, at the beginning, r.key is set to 0 and for every vertex u other than
+   r, u.key is set to infinity.
+   After this, every vertex is inserted into the min-priority queue working on
+   the basis of the vertices' keys.
+   Now, in every iteration, a vertex u having a least value of u.key is
+   extracted from the min-priority queue.
+   Consequently, for every vertex v which is adjacent to u and is currently not
+   part of the growing tree, v.key and v.pre are re-calculated as required.
+   After all vertices have been extracted, the algorithm stops and the edge set
+   constituting an MST is given by A = {(u.pre, u) : u belongs to (G.V - {r})}.
+   [The extraction of a vertex from the min-priority queue should be thought of
+    as the extracted vertex being added to the growing tree.
+    Thus, the vertices present in the min-priority queue at any time are those
+    vertices which are not part of the growing tree at that time.]
+
+   In the Prim's algorithm, after every iteration, the edges selected so far
+   always form a tree.
+
+
+   The operation INSERT(Q, u) inserts vertex u into the min-priority queue Q.
+   The operation EXTRACT-MIN(Q) extracts a vertex from Q having a least key.
+   The operation DECREASE-KEY(Q, u, new-key) decreases the key of vertex u to
+   new-key, in Q. The new key must be less than or equal to vertex u's current
+   key.
+
+
+   MST-PRIM(G, w, r) --------------------------------------------> O(|E| log|V|)
+
+   01. for each vertex u belonging to G.V
+   02.     u.key = infinity
+   03.     u.pre = NIL
+   04. r.key = 0
+   05. Q = phi (empty min-priority queue)
+   06. for each vertex u belonging to G.V
+   07.     INSERT(Q, u)
+   08. while Q != phi
+   09.     u = EXTRACT-MIN(Q)
+   10.     for each vertex v in G.Adj[u]
+   11.         if v belongs to Q and w(u, v) < v.key
+   12.             v.key = w(u, v)
+   13.             v.pre = u
+   14.             DECREASE-KEY(Q, v, w(u, v))
+
+
+   Assuming a binary min-heap implementation,
+   (1) Setting the initial values in lines 01-04 takes O(|V|) time.
+   (2) Initializing the min-priority queue Q in line 05 takes O(1) time.
+   (3) Inserting the vertices into Q in lines 06-07 takes O(|V|) time
+       (not O(|V| log|V|) as r gets inserted into Q as the root in O(1) time,
+       and since every new vertex u's key is infinity, therefore u also gets
+       inserted into Q in O(1) time.
+   (4) The EXTRACT-MIN operations in lines 08-09 take O(|V| log|V|) time.
+   (5) The for loop in line 10 executes O(|E|) times (also accounting for the
+       outer while loop in line 08), as the total no. of edges to be checked is
+       equal to 2|E|.
+       Hence, the total time taken for the DECREASE-KEY operations is
+       O(|E| log|V|).
+   So, the running time is equal to O((|V| + |E|) log|V|), which can be restated
+   as O(|E| log|V|), since G is connected and thus, |E| >= (|V| - 1).
+
+ */
 
 
 
