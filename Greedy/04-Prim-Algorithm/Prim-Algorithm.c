@@ -508,6 +508,8 @@ void free_graph(Graph* ptr_g)
    In the Prim's algorithm, after every iteration, the edges selected so far
    always form a tree.
 
+   The Prim's algorithm is preferred for dense graphs.
+
 
    The operation INSERT(Q, u) inserts vertex u into the min-priority queue Q.
    The operation EXTRACT-MIN(Q) extracts a vertex from Q having a least key.

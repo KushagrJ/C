@@ -390,6 +390,8 @@ void free_graph(Graph* ptr_g)
    In the Kruskal's algorithm, after every iteration, the edges selected so far
    may or may not form a tree.
 
+   The Kruskal's algorithm is preferred for sparse graphs.
+
 
    The operation MAKE-SET(v) creates a new set consisting only of vertex v and
    makes v the representative vertex of that set.
@@ -418,14 +420,17 @@ void free_graph(Graph* ptr_g)
    (2) Creating the list in line 04 takes either O(1) or O(|E|) time.
    (3) Sorting the list in line 05 takes O(|E| log|E|) time.
    (4) All MAKE-SET, FIND-SET and UNION operations from lines 02-03 and 06-09
-       together take O((|V| + |E|) alpha(|V|)) time, where alpha is a very
-       slowly growing function due to the heuristics.
+       together take O((|V| + |E|) alpha(|V|)) time (since there are |V|
+       MAKE-SET and |E| UNION operations), where alpha is a very slowly growing
+       function due to the heuristics.
    Since G is connected, therefore |E| >= (|V| - 1), and so the disjoint-set
    operations take O(|E| alpha(|V|)) time.
-   Moreover, since alpha(|V|) = O(log |V|) = O(log |E|), the total running time
+   Moreover, since alpha(|V|) = O(log|V|) = O(log|E|), the total running time
    of the Kruskal's algorithm becomes O(|E| log|E|).
    Since the graph doesn't contain any self loops and parallel edges, therefore
    |E| < (|V| ^ 2), making log|E| = O(log|V|).
    So, the running time can be restated as O(|E| log|V|).
+   [Alternatively, we can directly state the running time as O(|E| log|V|) from
+    O(|E| alpha(|V|)), since alpha(|V|) = O(log|V|)]
 
  */
