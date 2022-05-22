@@ -390,6 +390,8 @@ void free_graph(Graph* ptr_g)
    In the Kruskal's algorithm, after every iteration, the edges selected so far
    may or may not form a tree.
 
+   The Kruskal's algorithm greedily selects edges.
+
    The Kruskal's algorithm is preferred for sparse graphs.
 
 

@@ -1,6 +1,8 @@
+// This is a proper example of dynamic programming.
+
 // ans[i] is the length of a longest increasing subsequence in the range
-// 0-th integer to i-th integer, under the constraint that nums[i] is present in
-// the subsequence.
+// 0-th integer to i-th integer, under the constraint that nums[i] is the last
+// element of that subsequence.
 
 int length_of_longest_increasing_subsequence(int* nums, int nums_size)
 {
