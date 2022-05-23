@@ -40,6 +40,22 @@ assigned 1 and the final n2 elements can be assigned 2.
     longest SIS beginning with that 2 and terminating with that 7.
 
 
+    Solution 1 (Dynamic Programming) :-
+
+    Among all of the SISes terminating at nums[i], let ans[i] be the length of a
+    longest such SIS, i.e. let ans[i] be the value of an optimal solution to the
+    i-th subproblem of this problem (with respect to this algorithm).
+
+    Thus, for the full problem, the value of an optimal solution, i.e. the
+    length of a longest SIS, is max(ans[0], ans[1], ... , ans[nums_size - 1]).
+
+    The recursive definition of the value of an optimal solution to this
+    problem is as follows:
+    (1) If i == 0, then ans[i] = 1.
+    (2) If i > 0, then ans[i] = 
+
+    # COMPLETE THIS SOLUTION LATER.
+
     Solution 2 (Dynamic Programming) :-
 
     For every possible length i, this algorithm 'implicitly' stores exactly one
@@ -95,10 +111,12 @@ assigned 1 and the final n2 elements can be assigned 2.
     [The SISes are stored 'implicitly' means that only the terminating elements
      of the SISes are stored, instead of storing the actual subsequences]
 
-    For this problem, a subproblem is to find an optimal SIS of length i.
-    
-    Due to the manner in which optimal solutions to the subproblems are found,
-    defining the value of an optimal solution for the i-th subproblem and
+    With repsect to this algorithm, a subproblem for this problem is to find an
+    optimal SIS of length i.
+
+    Due to the maximum possible value of i not being known beforehand (as the
+    aim of this algorithm is to find this maximum possible value of i),
+    recursively defining the value of an optimal solution to this problem and
     implementing this algorithm in a top-down fashion (with or without
     memoization) is difficult.
 
