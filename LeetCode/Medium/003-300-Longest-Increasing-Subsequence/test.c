@@ -1,10 +1,4 @@
-// This is a proper example of dynamic programming.
-
-// ans[i] is the length of a longest increasing subsequence in the range
-// 0-th integer to i-th integer, under the constraint that nums[i] is the last
-// element of that subsequence.
-
-int length_of_longest_increasing_subsequence(int* nums, int nums_size)
+int lengthOfLIS(int* nums, int nums_size)
 {
 
     int* ans = malloc(nums_size * sizeof (int));
@@ -21,9 +15,9 @@ int length_of_longest_increasing_subsequence(int* nums, int nums_size)
     {
         ans[i] = 1;
 
-        for (int j = (i - 1); j >= 0; j--)
+        for (int j = 0; j < i; j++)
         {
-            if ((nums[i] > nums[j]) && (ans[i] < (ans[j] + 1)))
+            if ((nums[i] > nums[j]) && (ans[i] <= ans[j]))
                 ans[i] = (ans[j] + 1);
         }
 

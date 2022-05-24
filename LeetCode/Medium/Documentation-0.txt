@@ -52,9 +52,9 @@ assigned 1 and the final n2 elements can be assigned 2.
     The recursive definition of the value of an optimal solution to this
     problem is as follows:
     (1) If i == 0, then ans[i] = 1.
-    (2) If i > 0, then ans[i] = 
-
-    # COMPLETE THIS SOLUTION LATER.
+    (2) If i > 0, then ans[i] = among all of the values of ans[j] (0 <= j < i)
+        such that nums[j] < nums[i], a maximum such value of ans[j] plus 1.
+        If no such j exists, then ans[i] = 1.
 
 
     Solution 2 (Dynamic Programming) :-
