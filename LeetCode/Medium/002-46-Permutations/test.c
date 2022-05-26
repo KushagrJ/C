@@ -63,7 +63,7 @@ int** permute(int* nums, int nums_size, int* ptr_nop, int** ptr_sop)
     memmove(arr, nums, (nums_size * sizeof (int)));
 
     // To generate the permutations in lexicographic order :-
-    // qsort(arr, arr_size, sizeof (int), qsort_compare);
+    // qsort(arr, nums_size, sizeof (int), qsort_compare);
 
     // cnp == current no. of permutations.
     int cnp = 0;
