@@ -65,8 +65,7 @@ int main(void)
     take_input_from_user_and_create_graph(&g);
 
     if (bellman_ford(&g))
-        // print_shortest_paths(&g);
-        ;
+        print_shortest_paths(&g);
     else
         printf("\nError: Negative-weight cycle reachable from source exists\n");
 
@@ -186,8 +185,6 @@ bool bellman_ford(Graph* ptr_g)
                 ptr_current_edge = ((ptr_current_edge)->ptr_next_edge);
             }
         }
-
-        print_shortest_paths(ptr_g);
 
         free(temp_dist);
     }
