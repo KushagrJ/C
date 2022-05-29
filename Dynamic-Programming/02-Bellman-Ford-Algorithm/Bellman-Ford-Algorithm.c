@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <stdbool.h>
+#include <string.h>
 
 
 typedef struct edge
@@ -28,10 +29,6 @@ typedef struct edge
 typedef struct graph
 {
 
-    // e points to the adjacency list representation of the graph corresponding
-    // to this graph object.
-    Edge** e;
-
     // n is the number of vertices in the graph corresponding to this graph
     // object.
     size_t n;
@@ -39,6 +36,10 @@ typedef struct graph
     // s is the vertex number of the source vertex in the graph corresponding
     // to this graph object.
     size_t s;
+
+    // e points to the adjacency list representation of the graph corresponding
+    // to this graph object.
+    Edge** e;
 
     // For the graph corresponding to this graph object, dist stores the
     // shortest distance estimates from vertex s to the other vertices.
@@ -96,24 +97,9 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
     }
     ((ptr_g)->e) = e;
 
-    int* dist = malloc(n * sizeof(int));
-    if (dist == NULL)
-    {
-        fprintf(stderr, "Unsuccessful allocation\n");
-        exit(EXIT_FAILURE);
-    }
-    ((ptr_g)->dist) = dist;
-
-    size_t* pre = malloc(n * sizeof(size_t));
-    if (pre == NULL)
-    {
-        fprintf(stderr, "Unsuccessful allocation\n");
-        exit(EXIT_FAILURE);
-    }
-    ((ptr_g)->pre) = pre;
-
     printf("\nEnter edges (q to quit) :-\n");
-    printf("(1 2 5 means an edge from vertex 1 to vertex 2 of weight 5)\n\n");
+    printf("(1 2 5 means an edge from vertex 1 to vertex 2 of weight 5)\n");
+    printf("(Don't enter self-loops and parallel edges)\n\n");
 
     while (true)
     {
@@ -138,15 +124,31 @@ void take_input_from_user_and_create_graph(Graph* ptr_g)
         e[u - 1] = ptr_current_edge;
     }
 
+    int* dist = malloc(n * sizeof(int));
+    if (dist == NULL)
+    {
+        fprintf(stderr, "Unsuccessful allocation\n");
+        exit(EXIT_FAILURE);
+    }
+    ((ptr_g)->dist) = dist;
+
+    size_t* pre = malloc(n * sizeof(size_t));
+    if (pre == NULL)
+    {
+        fprintf(stderr, "Unsuccessful allocation\n");
+        exit(EXIT_FAILURE);
+    }
+    ((ptr_g)->pre) = pre;
+
 }
 
 
 bool bellman_ford(Graph* ptr_g)
 {
 
-    Edge** e = ((ptr_g)->e);
     size_t n = ((ptr_g)->n);
     size_t s = ((ptr_g)->s);
+    Edge** e = ((ptr_g)->e);
     int* dist = ((ptr_g)->dist);
     size_t* pre = ((ptr_g)->pre);
 
@@ -163,8 +165,7 @@ bool bellman_ford(Graph* ptr_g)
             exit(EXIT_FAILURE);
         }
 
-        for (size_t x = 0; x < n; x++)
-            temp_dist[x] = dist[x];
+        memmove(temp_dist, dist, (n * sizeof (int)));
 
         for (size_t u = 0; u < n; u++)
         {
@@ -175,8 +176,7 @@ bool bellman_ford(Graph* ptr_g)
                 size_t v = ((ptr_current_edge)->v);
                 int w = ((ptr_current_edge)->w);
 
-                if ((temp_dist[u] != INT_MAX) &&
-                       (temp_dist[v] > (temp_dist[u] + w)))
+                if ((temp_dist[u] != INT_MAX) && (dist[v] > (temp_dist[u] + w)))
                 {
                     dist[v] = (temp_dist[u] + w);
                     pre[v] = u;
@@ -258,8 +258,8 @@ void print_shortest_path_from_s_to_t(Graph* ptr_g, size_t t)
 void free_graph(Graph* ptr_g)
 {
 
-    Edge** e = ((ptr_g)->e);
     size_t n = ((ptr_g)->n);
+    Edge** e = ((ptr_g)->e);
     int* dist = ((ptr_g)->dist);
     size_t* pre = ((ptr_g)->pre);
 
@@ -366,7 +366,7 @@ void free_graph(Graph* ptr_g)
        05. for k = 1 to (|G.V| - 1)
        06.     let temp_dist[|V|] be a new copy of the current dist table
        07.     for each edge (u, v) belonging to G.E
-       08.         if temp_dist[v] > temp_dist[u] + w(u, v)
+       08.         if dist[v] > temp_dist[u] + w(u, v)
        09.             dist[v] = temp_dist[u] + w(u, v)
        10.             pre[v] = u
        11. for each edge (u, v) belonging to G.E
@@ -459,8 +459,8 @@ void free_graph(Graph* ptr_g)
    than k edges may also be found immediately after the k-th iteration.
    Thus, there is no well defined subproblem when the following serial update
    version of the Bellman-Ford algorithm is used.
-   [The following serial update version probably shouldn't be considered as a
-    dynamic programming algorithm, due to the lack of well defined subproblems]
+   [The following serial update version shouldn't be considered as an example of
+    dynamic programming, due to the lack of well-defined subproblems]
 
        BELLMAN-FORD(G, w, s, dist, pre) ---------------------> O(|V|^2 + |V||E|)
 
