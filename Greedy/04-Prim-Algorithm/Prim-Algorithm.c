@@ -302,7 +302,7 @@ void decrease_key(Graph* ptr_g, unsigned x, int new_key_of_x)
 
     (key[x]) = new_key_of_x;
 
-    // This is the min heap's swim-up procedure.
+    // This is the min heap's sift-up procedure.
     // x is the vertex number and index is the index of vertex x in the heap.
 
     unsigned index = (((void**) (vertices[x])) - min_priority_queue);
@@ -314,21 +314,16 @@ void decrease_key(Graph* ptr_g, unsigned x, int new_key_of_x)
         unsigned parent_x =
             (((void**) (min_priority_queue[parent_index])) - vertices);
 
-        if ((key[x]) < (key[parent_x]))
-        {
-            (vertices[parent_x]) = ((void*) (min_priority_queue + index));
-            (min_priority_queue[index]) = ((void*) (vertices + parent_x));
-
-            (vertices[x]) = ((void*) (min_priority_queue + parent_index));
-            (min_priority_queue[parent_index]) = ((void*) (vertices + x));
-
-            index = parent_index;
-        }
-
-        else
-        {
+        if ((key[x]) >= (key[parent_x]))
             break;
-        }
+
+        (vertices[parent_x]) = ((void*) (min_priority_queue + index));
+        (min_priority_queue[index]) = ((void*) (vertices + parent_x));
+
+        (vertices[x]) = ((void*) (min_priority_queue + parent_index));
+        (min_priority_queue[parent_index]) = ((void*) (vertices + x));
+
+        index = parent_index;
     }
 
 }
