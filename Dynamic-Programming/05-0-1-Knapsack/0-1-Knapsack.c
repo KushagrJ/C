@@ -16,6 +16,21 @@ int knapsack(bool*, int(*)[M + 1], int, int);
 int main(void)
 {
 
+    printf("  Item: ");
+    for (int i = 0; i < N; i++)
+        printf("%d ", (i + 1));
+    putchar('\n');
+
+    printf("Weight: ");
+    for (int i = 0; i < N; i++)
+        printf("%d ", w[i]);
+    putchar('\n');
+
+    printf("Profit: ");
+    for (int i = 0; i < N; i++)
+        printf("%d ", p[i]);
+    putchar('\n');
+
     bool is_included[N] = {false};
 
     int g[N + 1][M + 1];
@@ -25,25 +40,15 @@ int main(void)
     for (int j = 0; j <= M; j++)
         g[N][j] = 0;
 
+    printf("\nKnapsack capacity: %d\n", M);
+
     printf("Max profit = %d\n", knapsack(is_included, g, 0, M));
 
     printf("Items included: ");
     for (int i = 0; i < N; i++)
         if (is_included[i])
-            printf("%d ", i);
+            printf("%d ", (i + 1));
     putchar('\n');
-
-/*
-    for (int i = 0; i <= N; i++)
-    {
-        for (int j = 0; j <= M; j++)
-        {
-            printf("%2d ", g[i][j]);
-        }
-
-        putchar('\n');
-    }
-*/
 
     return 0;
 
