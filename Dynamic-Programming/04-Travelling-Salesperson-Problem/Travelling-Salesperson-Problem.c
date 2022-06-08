@@ -5,7 +5,6 @@
    Given a weighted, directed/undirected and complete graph with all finite,
    non-negative edge weights, the aim is to find an optimal hamiltonian cycle.
 
-
    For a directed/undirected graph, a 'hamiltonian cycle' is a finite
    alternating sequence of vertices and directed/undirected edges starting and
    ending at the same vertex such that no directed/undirected edges are
@@ -18,7 +17,6 @@
    repeated and every vertex is traversed at least once.
    [This definition of a tour differs from the one which is generally accepted]
 
-
    A common application of the travelling salesperson problem, besides a literal
    travelling salesperson wanting to sell items in n different locations, is the
    courier service, wherein a delivery executive is required to deliver items in
@@ -27,7 +25,6 @@
    would like to make an optimal tour.
    [The costs, represented using edge weights, can mean distances, toll taxes,
     etc.]
-
 
    For eg., let the delivery executive start from location A, deliver items in
    locations B, C, D, ... , and end at location A.
@@ -44,7 +41,6 @@
    roads between every pair of locations.
    Moreover, for some locations A and B, a direct road may exist from A to B,
    but not from B to A (one-way road).
-   [If graph 1 isn't a connected graph, then there is no possible tour]
 
    Now, let graph 2 be a complete graph representing the locations, with the
    edge weights being the shortest distances between the respective locations,
@@ -57,8 +53,24 @@
    A to B in graph 2 means that there may be a direct road from A to B, or the
    delivery executive may have to go through some other locations C, D, E, ...
    in order to go from A to B.
-   In other words, graph 2 is only concerned with the distance that the delivery
-   executive would have to travel in order to go from one location to another,
-   without taking into account the actual path that they would have to follow.
+   In other words, graph 2 is only concerned with the minimum distance that the
+   delivery executive would have to travel in order to go from one location to
+   another, without taking into account the actual path that they would have to
+   follow.
+
+   Now, since the edge weights of graph 2 are the minimum distances to be
+   travelled, therefore graph 2 automatically satisfies the triangle inequality,
+   i.e. for every 3 locations A, B & C, w(A, B) <= w(A, C) + w(C, B).
+
+   Since graph 2 satisfies the triangle inequality, therefore finding an optimal
+   tour in graph 1 is the same as finding an optimal hamiltonian cycle in
+   graph 2.
+
+   In most cases, graph 2 is directly given as input, instead of graph 1, for
+   the travelling salesperson problem.
+
+
+   Now, to solve the travelling salesperson problem using dynamic programming,
+   the four-step sequence to be followed is described below :-
 
  */
