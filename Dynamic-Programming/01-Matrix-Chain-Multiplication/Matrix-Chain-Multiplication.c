@@ -250,7 +250,7 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
 
  /*
 
- * The Matrix Chain Multiplication Problem (Dynamic Programming) :-
+ * The Matrix Chain Multiplication Problem :-
 
    Given a chain A_0, A_1, ... , A_(n-1) of n matrices, where for i = 0, 1, ...,
    (n-1), matrix A_i has dimensions p[i] * p[i+1], the aim is to fully
