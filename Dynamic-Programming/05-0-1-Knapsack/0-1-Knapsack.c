@@ -123,6 +123,8 @@ void print_table(int(* g)[M+1])
 
 /*
 
+ * CHANGE ALL UPPERCASE VARIABLE/TABLE NAMES TO LOWERCASE.
+
  * The 0/1 Knapsack Problem :-
 
    Given a set of N items, with W[i] & P[i] (both integers) being the weight
