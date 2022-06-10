@@ -302,8 +302,8 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
    Let P(n) denote the number of alternative parenthesizations of a chain of n
    matrices.
 
-   When n = 1, the chain consists of just one matrix, and therefore there is
-   only one way to fully parenthesize the matrix product. So, P(1) = 1.
+   When n == 1, the chain consists of just one matrix, and therefore there is
+   only one way to fully parenthesize the matrix product. So, P(1) == 1.
 
    Now, let the chain of matrices be A_0, A_1, ... , A_(n-1).
 
@@ -391,11 +391,11 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
        problem is as follows:
        (1) If i == j, then m[i][j] == 0, as no scalar multiplications need to be
            done to compute A_(i:i).
-           Thus, m[i][i] = 0 for i = 0, 1, ... , (n-1).
-       (2) If i < j, then m[i][j] = the minimum value of
+           Thus, m[i][i] == 0 for i == 0, 1, ... , (n-1).
+       (2) If i < j, then m[i][j] == the minimum value of
            m[i][k] + m[k+1][j] + (p[i] * p[k+1] * p[j+1]) over all possible
            values of k (i.e. i <= k < j).
-       (3) If i > j, then m[i][j] = NIL, as i > j means an invalid subproblem.
+       (3) If i > j, then m[i][j] == NIL, as i > j means an invalid subproblem.
 
        The overlapping subproblems property of this problem is as follows:
        According to the above definition of the value of an optimal solution,

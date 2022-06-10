@@ -344,7 +344,7 @@ void free_graph(Graph* ptr_g)
 
        The recursive definition of the value of an optimal solution to this
        problem is as follows:
-       dist_k[t] = the minimum value out of (1) dist_(k-1)[t] and (2) the
+       dist_k[t] == the minimum value out of (1) dist_(k-1)[t] and (2) the
        minimum value of dist_(k-1)[v] + w[v][t] over all possible values of v
        (i.e. over all values of v such that there is an edge from v to t).
 
