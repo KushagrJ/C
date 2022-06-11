@@ -16,26 +16,26 @@ const int W[N] = {2, 3, 4};
 #define M 6
 
 
-int g_func(int(*)[M+1], int, int);
+int g_function(int(*)[M+1], int, int);
 void print_table(int(*)[M+1]);
 
 
 int main(void)
 {
 
-    int g[N+1][M+1];
+    int g_table[N+1][M+1];
 
     for (int i = 0; i <= N; i++)
         for (int j = 0; j <= M; j++)
-            g[i][j] = -1;
+            g_table[i][j] = -1;
 
-    printf("Max profit: %d\n", g_func(g, 0, M));
+    printf("Max profit: %d\n", g_function(g_table, 0, M));
 
     printf("Items included: ");
 
     for (int i = 0, j = M; i < N; i++)
     {
-        if (g[i][j] != g[i+1][j])
+        if (g_table[i][j] != g_table[i+1][j])
         {
             printf("%d ", i);
             j -= W[i];
@@ -49,41 +49,52 @@ int main(void)
 }
 
 
-int g_func(int(* g)[M+1], int i, int j)
+int g_function(int(* g_table)[M+1], int i, int j)
 {
 
     if (i == N)
     {
-        g[i][j] = 0;
+        g_table[i][j] = 0;
+
+        print_table(g_table);
+        putchar('\n');
+
         return 0;
     }
 
-    if (g[i+1][j] != -1)
-        g[i][j] = g[i+1][j];
-    else
-        g[i][j] = g_func(g, (i+1), j);
 
-    if (g[i+1][j - W[i]] != -1)
+    // profit_1 is the max total profit including item i.
+    int profit_1 = -1;
+
+    if (j >= W[i])
     {
-        if ((j >= W[i]) && ((g[i+1][j - W[i]] + P[i]) > g[i][j]))
-            g[i][j] = (g[i+1][j - W[i]] + P[i]);
+        if (g_table[i+1][j - W[i]] != -1)
+            profit_1 = (g_table[i+1][j - W[i]] + P[i]);
+        else
+            profit_1 = (g_function(g_table, (i+1), (j - W[i])) + P[i]);
     }
 
-    else
-    {
-        if ((j >= W[i]) && ((g_func(g, (i+1), (j - W[i])) + P[i]) > g[i][j]))
-            g[i][j] = (g[i+1][j - W[i]] + P[i]);
-    }
 
-    print_table(g);
+    // profit_2 is the max total profit excluding item i.
+    int profit_2;
+
+    if (g_table[i+1][j] != -1)
+        profit_2 = g_table[i+1][j];
+    else
+        profit_2 = g_function(g_table, (i+1), j);
+
+
+    g_table[i][j] = ((profit_1 > profit_2) ? profit_1 : profit_2);
+
+    print_table(g_table);
     putchar('\n');
 
-    return g[i][j];
+    return g_table[i][j];
 
 }
 
 
-void print_table(int(* g)[M+1])
+void print_table(int(* g_table)[M+1])
 {
 
     printf("  ");
@@ -102,8 +113,8 @@ void print_table(int(* g)[M+1])
 
         for (int j = 0; j <= M; j++)
         {
-            if (g[i][j] != -1)
-                printf(" %2d |", g[i][j]);
+            if (g_table[i][j] != -1)
+                printf(" %2d |", g_table[i][j]);
             else
                 printf("    |");
         }
