@@ -123,19 +123,17 @@ void print_table(int(* g)[M+1])
 
 /*
 
- * CHANGE ALL UPPERCASE VARIABLE/TABLE NAMES TO LOWERCASE.
-
  * The 0/1 Knapsack Problem :-
 
-   Given a set of N items, with W[i] & P[i] (both integers) being the weight
+   Given a set of n items, with w[i] & p[i] (both integers) being the weight
    (in pounds) and profit (in dollars) of the i-th item, and a knapsack that can
-   carry a maximum of M pounds, the aim is to fill the knapsack using a subset
+   carry a maximum of m pounds, the aim is to fill the knapsack using a subset
    of the given set of items in a way that maximizes the total profit.
 
-   In other words, given a set of N items, with W[i] & P[i] (both integers)
+   In other words, given a set of n items, with w[i] & p[i] (both integers)
    being the weight (in pounds) and profit (in dollars) of the i-th item, the
    aim is to select a subset of the given set of items such that the total
-   weight is less than or equal to M pounds and the total profit is maximized.
+   weight is less than or equal to m pounds and the total profit is maximized.
 
    A common application of the 0/1 knapsack problem is when a thief is robbing a
    store and they can either take an item or leave it behind.
@@ -148,43 +146,43 @@ void print_table(int(* g)[M+1])
        Suppose that after running some algorithm, it is found that for the set
        of items {0, 1, 2, 3, 4, 5, 6}, the subset {0, 2, 5} is an (not 'the')
        optimal selection (i.e. the subset {0, 2, 5} results in the maximum total
-       profit) when the maximum allowed total weight is M pounds. Then, for the
+       profit) when the maximum allowed total weight is m pounds. Then, for the
        set of items {0, 1, 3, 4, 5, 6}, the subset {0, 5} must be an optimal
-       selection when the maximum allowed total weight is (M - W[2]) pounds.
+       selection when the maximum allowed total weight is (m - w[2]) pounds.
        This is because if there were a different optimal selection for the set
        of items {0, 1, 3, 4, 5, 6} leading to a larger profit when the maximum
-       allowed total weight is (M - W[2]) pounds, then that selection could've
+       allowed total weight is (m - w[2]) pounds, then that selection could've
        been substituted in the place of {0, 5} in the subset {0, 2, 5} to get a
-       larger profit, which leads to a contradiction.
+       larger total profit, which leads to a contradiction.
 
        According to this algorithm, to find the maximum total profit that can be
-       achieved using the set of items {0, 1, ... , (N-1)} when the maximum
-       allowed total weight is M pounds, the items are considered one by one
-       from item (N-1) to item 0 and using the set of items
-       {i, (i+1), ... , (N-1)}, it is checked whether including or excluding the
+       achieved using the set of items {0, 1, ... , (n-1)} when the maximum
+       allowed total weight is m pounds, the items are considered one by one
+       from item (n-1) to item 0 and using the set of items
+       {i, (i+1), ... , (n-1)}, it is checked whether including or excluding the
        i-th item in the selection leads to the maximum total profit.
 
    (2) Let g[i][j] be the maximum total profit that can be achieved using the
-       set of items {i, (i+1), ... , (N-1)} when the maximum allowed total
+       set of items {i, (i+1), ... , (n-1)} when the maximum allowed total
        weight is j pounds.
 
        For the full problem, the maximum total profit that can be achieved using
-       the set of items {0, 1, ... , (N-1)} when the maximum allowed total
-       weight is M pounds is thus g[0][M].
+       the set of items {0, 1, ... , (n-1)} when the maximum allowed total
+       weight is m pounds is thus g[0][m].
 
        The recursive definition of the value of an optimal solution to this
        problem is as follows:
-       (1) If i == N, i.e. if the set of items is empty, then g[i][j] == 0 for
-           all possible values of j (i.e. 0 <= j <= M).
-       (2) If i < N, i.e. if the set of items is {i, (i+1), ... , (N-1)}, then
-           (i) if W[i] > j, i.e. if the weight of the i-th item is greater than
+       (1) If i == n, i.e. if the set of items is empty, then g[i][j] == 0 for
+           all possible values of j (i.e. 0 <= j <= m).
+       (2) If i < n, i.e. if the set of items is {i, (i+1), ... , (n-1)}, then
+           (i) if w[i] > j, i.e. if the weight of the i-th item is greater than
                the maximum allowed total weight, then g[i][j] == g[i+1][j].
-           (ii) else, g[i][j] == max{g[i+1][j], g[i+1][j - W[i]] + P[i]}.
+           (ii) else, g[i][j] == max{g[i+1][j], g[i+1][j - w[i]] + p[i]}.
 
-       For eg., let N == 10, i == 4 and W[4] == 3.
+       For eg., let n == 10, i == 4 and w[4] == 3.
        The subproblem of finding an optimal selection from the set of items
        {4, 5, 6, 7, 8, 9} when the maximum allowed total weight is j pounds
-       (0 <= j <= M) is solved in the following manner:
+       (0 <= j <= m) is solved in the following manner:
        First, it is checked whether the weight of item 4 (i.e. 3 pounds) is
        greater than the maximum allowed total weight (i.e. j pounds).
        If 3 > j, then item 4 cannot be included in the selection and thus, the
@@ -206,19 +204,19 @@ void print_table(int(* g)[M+1])
            maximum total profit that can be achieved using the set of items
            {5, 6, 7, 8, 9} when the maximum total allowed weight is j pounds.
 
-   (3) 0-1-KNAPSACK(N, P, W, M) -----------------------------------------> O(NM)
+   (3) 0-1-KNAPSACK(n, p, w, m) -----------------------------------------> O(nm)
 
-       1. Let g[N+1][M+1] be a new table
-       2. for j = 0 to M
-       3.     g[N][j] = 0
-       4. for i = (N-1) to 0
-       5.     for j = 0 to M
+       1. Let g[n+1][m+1] be a new table
+       2. for j = 0 to m
+       3.     g[n][j] = 0
+       4. for i = (n-1) to 0
+       5.     for j = 0 to m
        6.         g[i][j] = g[i+1][j]
-       7.         if (j >= W[i]) and (g[i+1][j - W[i]] + P[i] > g[i][j])
-       8.             g[i][j] = g[i+1][j - W[i]] + P[i]
+       7.         if (j >= w[i]) and (g[i+1][j - w[i]] + p[i] > g[i][j])
+       8.             g[i][j] = g[i+1][j - w[i]] + p[i]
        9. return g
 
-       Since to find the value of g[0][M], all the values of the table g aren't
+       Since to find the value of g[0][m], all the values of the table g aren't
        required to be found, therefore top-down memoization is better than
        bottom-up tabulation in this algorithm.
 
@@ -234,10 +232,10 @@ void print_table(int(* g)[M+1])
        Does the choice of optimal solution matter in this algorithm?
        [To be answered]
 
-   (4) PRINT-SELECTED-ITEMS(g, N, M)
+   (4) PRINT-SELECTED-ITEMS(g, n, m)
 
-       1. j = M
-       2. for i = 0 to (N-1)
+       1. j = m
+       2. for i = 0 to (n-1)
        3.     if g[i][j] != g[i+1][j]
        4.         print i
        5.         j = j - W[i]
