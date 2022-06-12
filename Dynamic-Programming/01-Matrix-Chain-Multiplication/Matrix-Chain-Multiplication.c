@@ -180,10 +180,11 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
 
        fib_dict = {}
        def fibonacci(n):
-           if (n == 1) or (n == 2):
-               return (n-1)
-           elif n in fib_dict:
+           if n in fib_dict:
                return fib_dict[n]
+           if (n == 1) or (n == 2):
+               fib_dict[n] = (n-1)
+               return (n-1)
            fib_dict[n] = (fibonacci(n-1) + fibonacci(n-2))
            return fib_dict[n]
 
