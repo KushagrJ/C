@@ -173,8 +173,7 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
        def fibonacci(n):
            if (n == 1) or (n == 2):
                return (n-1)
-           else:
-               return (fibonacci(n-1) + fibonacci(n-2))
+           return (fibonacci(n-1) + fibonacci(n-2))
 
    (2) Memoization (top-down) (better than method (1)) -
 
