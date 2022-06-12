@@ -52,6 +52,11 @@ int main(void)
 int g_function(int(* g_table)[M+1], int i, int j)
 {
 
+    if (g_table[i][j] != -1)
+    {
+        return g_table[i][j];
+    }
+
     if (i == N)
     {
         g_table[i][j] = 0;
@@ -62,27 +67,14 @@ int g_function(int(* g_table)[M+1], int i, int j)
         return 0;
     }
 
-
     // profit_1 is the max total profit including item i.
     int profit_1 = -1;
 
     if (j >= W[i])
-    {
-        if (g_table[i+1][j - W[i]] != -1)
-            profit_1 = (g_table[i+1][j - W[i]] + P[i]);
-        else
-            profit_1 = (g_function(g_table, (i+1), (j - W[i])) + P[i]);
-    }
-
+        profit_1 = (g_function(g_table, (i+1), (j - W[i])) + P[i]);
 
     // profit_2 is the max total profit excluding item i.
-    int profit_2;
-
-    if (g_table[i+1][j] != -1)
-        profit_2 = g_table[i+1][j];
-    else
-        profit_2 = g_function(g_table, (i+1), j);
-
+    int profit_2 = g_function(g_table, (i+1), j);
 
     g_table[i][j] = ((profit_1 > profit_2) ? profit_1 : profit_2);
 

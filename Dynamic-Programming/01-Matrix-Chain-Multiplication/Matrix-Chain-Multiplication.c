@@ -202,13 +202,12 @@ void print_optimal_parenthesization(size_t** s, size_t i, size_t j)
        def fibonacci(n):
            if (n == 1) or (n == 2):
                return (n-1)
-           else:
-               fib_i_minus_1 = 1
-               fib_i_minus_2 = 0
-               for i in range(3, (n+1)):
-                   fib_i = (fib_i_minus_1 + fib_i_minus_2)
-                   fib_i_minus_1, fib_i_minus_2 = fib_i, fib_i_minus_1
-               return fib_i
+           fib_i_minus_1 = 1
+           fib_i_minus_2 = 0
+           for i in range(3, (n+1)):
+               fib_i = (fib_i_minus_1 + fib_i_minus_2)
+               fib_i_minus_1, fib_i_minus_2 = fib_i, fib_i_minus_1
+           return fib_i
 
  * In method (1), the overlapping subproblems are calculated again and again,
    whereas in methods (2) and (3), the overlapping subproblems are calculated
