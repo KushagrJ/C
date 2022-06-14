@@ -369,10 +369,10 @@ void free_graph(Graph* ptr_g)
    overkill, as the greedy approach results in much more efficient algorithms.
 
 
-   In the Kruskal's algorithm, a disjoint-set data structure (efficiently
-   implemented as a disjoint-set forest with the union-by-rank and the
-   path-compression heuristics) is maintained whose disjoint sets consist of the
-   vertices belonging to the given graph.
+   In the Kruskal's algorithm, a disjoint-sets data structure (efficiently
+   implemented as a forest of disjoint sets forest with the union-by-rank and
+   the path-compression heuristics) is maintained whose disjoint sets consist of
+   the vertices belonging to the given graph.
    At the beginning, there are |V| disjoint sets, such that every set consists
    of a single vertex.
    In every iteration, a lowest-weight edge between two vertices belonging to
@@ -393,6 +393,8 @@ void free_graph(Graph* ptr_g)
    The Kruskal's algorithm greedily selects edges.
 
    The Kruskal's algorithm is preferred for sparse graphs.
+
+   The Kruskal's algorithm uses a disjoint-sets data structure.
 
 
    The operation MAKE-SET(v) creates a new set consisting only of vertex v and
@@ -417,7 +419,7 @@ void free_graph(Graph* ptr_g)
    09.         UNION(u, v)
    10. return A
 
-   Assuming a disjoint-set forest implementation,
+   Assuming a forest of disjoint sets implementation,
    (1) Initializing the set A in line 01 takes O(1) time.
    (2) Creating the list in line 04 takes either O(1) or O(|E|) time.
    (3) Sorting the list in line 05 takes O(|E| log|E|) time.

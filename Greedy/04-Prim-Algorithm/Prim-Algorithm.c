@@ -507,6 +507,8 @@ void free_graph(Graph* ptr_g)
 
    The Prim's algorithm is preferred for dense graphs.
 
+   The Prim's algorithm uses a priority queue data structure.
+
 
    The operation INSERT(Q, u) inserts vertex u into the min-priority queue Q.
    The operation EXTRACT-MIN(Q) extracts a vertex from Q having a least key.
@@ -557,7 +559,7 @@ void free_graph(Graph* ptr_g)
 
 /*
 
- * Min-Heap :- (Similar discussion applies to Max-Heaps)
+ * Min-Heap :- (Similar discussion applies to Max-Heap's)
 
    The procedures sift_up() and sift_down() assume that the object being sifted
    up/down is the only object in the entire heap which potentially violates the
