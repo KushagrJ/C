@@ -15,6 +15,9 @@ For eg., to sort an array consisting only of 0's, 1's and 2's, the number of
 the array, the first n0 elements can be assigned 0, the next n1 elements can be
 assigned 1 and the final n2 elements can be assigned 2.
 
+For unsigned integers, (a + b) is divisible by k if and only if a and b are both
+divisible by k, or if ((a % k) + (b % k)) is equal to k.
+
 
 --------------------------------------------------------------------------------
 
