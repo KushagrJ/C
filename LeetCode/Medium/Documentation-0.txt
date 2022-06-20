@@ -18,6 +18,10 @@ assigned 1 and the final n2 elements can be assigned 2.
 For unsigned integers, (a + b) is divisible by k if and only if a and b are both
 divisible by k, or if ((a % k) + (b % k)) is equal to k.
 
+If it is given that an array is sorted, then to know whether the array is sorted
+in increasing or decreasing order, only the first and last elements of the array
+need to be compared.
+
 
 --------------------------------------------------------------------------------
 
