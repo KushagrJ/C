@@ -197,10 +197,10 @@ int rand_int(int min, int max)
 
 // Three of the various schemes of partitioning are -
 // (1) Hoare's partitioning scheme 1
-       (given in CLRS)
+//     (given in CLRS)
 // (2) Hoare's partitioning scheme 2
-       (using the conditions (i <= upper_index) && (arr[i] <= pivot)
-        and (j >= lower_index) && (arr[j] >= pivot))
+//     (using the conditions (i <= upper_index) && (arr[i] <= pivot)
+//      and (j >= lower_index) && (arr[j] >= pivot))
 // (3) Lomuto's partitioning scheme
 
 // This program uses Hoare's partitioning scheme 1.
