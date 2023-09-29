@@ -55,19 +55,22 @@ int main(void)
 }
 
 
-int rand_int(int a, int b)
+int rand_int(int min, int max)
 {
-    size_t n = ((size_t) b - (size_t) a + (size_t) 1);
-    size_t rem = (((size_t) RAND_MAX + (size_t) 1) % n);
+    long long number_of_integers = (long long) max - (long long) min + 1LL;
 
-    size_t x;
-    do
+    if (number_of_integers > (long long) RAND_MAX + 1LL)
+        return 0;
+
+    long long extra = ((long long) RAND_MAX + 1LL) % number_of_integers;
+
+    while (true)
     {
-        x = (size_t) rand();
-    }
-    while (x >= (((size_t) RAND_MAX + (size_t) 1) - rem));
+        long long x = (long long) rand();
 
-    return (int) ((size_t) a + (x % n));
+        if (x < ((long long) RAND_MAX + 1LL) - extra)
+            return min + (int) (x % number_of_integers);
+    }
 }
 
 
