@@ -8,6 +8,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
+// All indices, sizes, capacities, etc. are of type ptrdiff_t.
+// size_t is used only with malloc(), realloc() and memmove().
+
+////////////////////////////////////////////////////////////////////////////////
+
 #define AL_INT_INDEX_OUT_OF_BOUNDS "Array List (int) - Index out of Bounds"
 #define AL_INT_CAPACITY_OVERFLOW "Array List (int) Capacity Overflow"
 #define AL_INT_OUT_OF_MEMORY "Array List (int) - Out of Memory"
