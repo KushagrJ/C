@@ -331,7 +331,7 @@ class My_String
         return -1;
     }
 
-    void substring(My_String ref_src, int i, int j)
+    void assign_using_substring(My_String ref_src, int i, int j)
     {
         if ((i >= j) || (i < 0) || (j > ref_src.size()))
 	    {
@@ -623,7 +623,7 @@ class Test
         System.out.println("-------------------------------------------------");
 
         s1.assign("hello");
-        s2.substring(s1, 1, 4);
+        s2.assign_using_substring(s1, 1, 4);
 
         s1.print();
         System.out.println();
