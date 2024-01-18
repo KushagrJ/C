@@ -598,7 +598,7 @@ void String_assign_using_substring(String* ptr_dst, String* ptr_src, int i,
     if ((i >= j) || (i < 0) || (j > ptr_src->size))
 	{
     	printf("\n-------------------------------------------");
-    	printf("\nString_substring()");
+    	printf("\nString_assign_using_substring()");
     	printf("\nINDEX OUT OF BOUNDS, EXITING DUE TO FAILURE");
     	printf("\n-------------------------------------------\n");
 
@@ -613,7 +613,7 @@ void String_assign_using_substring(String* ptr_dst, String* ptr_src, int i,
     if (ptr_dst->arr == NULL)
     {
         printf("\n-------------------------------------");
-        printf("\nString_assign_using_String()");
+        printf("\nString_assign_using_substring()");
         printf("\nOUT OF MEMORY, EXITING DUE TO FAILURE");
         printf("\n-------------------------------------\n");
 
@@ -831,3 +831,29 @@ void String_destroy(String* ptr)
 {
     free(ptr->arr);
 }
+
+
+
+/*
+
+int main(void)
+{
+    String** arr = malloc(3 * sizeof (String*));
+
+    for (int i = 0; i < 3; ++i)
+    {
+        arr[i] = malloc(sizeof (String));
+    }
+
+    String_assign_using_null_terminated_array_of_char(arr[0], "hello");
+    String_assign_using_null_terminated_array_of_char(arr[1], "world");
+    String_assign_using_null_terminated_array_of_char(arr[2], "hi");
+
+    for (int i = 0; i < 3; ++i)
+    {
+        String_print(arr[i]);
+        putchar('\n');
+    }
+}
+
+*/
