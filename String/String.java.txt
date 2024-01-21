@@ -549,65 +549,65 @@ class Test
 
         System.out.println("-------------------------------------------------");
 
-        My_String s1 = new My_String();
+        My_String ref_s1 = new My_String();
 
-        s1.assign("hello");
+        ref_s1.assign("hello");
 
-        s1.print();
+        ref_s1.print();
         System.out.println();
 
         System.out.println("-------------------------------------------------");
 
-        My_String s2 = new My_String();
+        My_String ref_s2 = new My_String();
 
-        s2.assign(s1);
-        s2.add('!');
+        ref_s2.assign(ref_s1);
+        ref_s2.add('!');
 
-        s2.print();
+        ref_s2.print();
         System.out.println();
 
         System.out.println("-------------------------------------------------");
 
-        s2.add(5, ' ');
+        ref_s2.add(5, ' ');
 
-        s2.print();
+        ref_s2.print();
         System.out.println();
 
         System.out.println("-------------------------------------------------");
 
-        s2.add(s1);
+        ref_s2.add(ref_s1);
 
-        s2.print();
+        ref_s2.print();
         System.out.println();
 
         System.out.println("-------------------------------------------------");
 
         System.out.print("Enter a string: ");
-        s2.assign(sc.nextLine());
+        ref_s2.assign(sc.nextLine());
 
         System.out.print("Your string: ");
-        s2.print();
+        ref_s2.print();
         System.out.println();
 
         System.out.println("-------------------------------------------------");
 
         System.out.print("Enter the destination string: ");
-        s1.assign(sc.nextLine());
+        ref_s1.assign(sc.nextLine());
 
         System.out.print("Enter the source string: ");
-        s2.assign(sc.nextLine());
+        ref_s2.assign(sc.nextLine());
 
-        System.out.println(s1.contains(s2));
+        System.out.println(ref_s1.contains(ref_s2));
 
-        System.out.println(s1.index_of(s2));
+        System.out.println(ref_s1.index_of(ref_s2));
 
-        System.out.println(s1.last_index_of(s2));
+        System.out.println(ref_s1.last_index_of(ref_s2));
 
         int index = 0;
 
         while (true)
         {
-            index = s1.next_index_of(s2, index);
+            index = ref_s1.next_index_of(ref_s2, index);
 
             if (index == - 1)
             {
@@ -622,41 +622,41 @@ class Test
 
         System.out.println("-------------------------------------------------");
 
-        s1.assign("hello");
-        s2.assign_using_substring(s1, 1, 4);
+        ref_s1.assign("hello");
+        ref_s2.assign_using_substring(ref_s1, 1, 4);
 
-        s1.print();
+        ref_s1.print();
         System.out.println();
 
-        s2.print();
-        System.out.println();
-
-        System.out.println("-------------------------------------------------");
-
-        s1.assign("hello world");
-        s1.remove(4);
-
-        s1.print();
+        ref_s2.print();
         System.out.println();
 
         System.out.println("-------------------------------------------------");
 
-        s1.assign("hello world");
-        s1.remove(4, 8);
+        ref_s1.assign("hello world");
+        ref_s1.remove(4);
 
-        s1.print();
+        ref_s1.print();
+        System.out.println();
+
+        System.out.println("-------------------------------------------------");
+
+        ref_s1.assign("hello world");
+        ref_s1.remove(4, 8);
+
+        ref_s1.print();
         System.out.println();
 
         System.out.println("-------------------------------------------------");
 
         System.out.print("Enter the source string: ");
-        s1.assign(sc.nextLine());
+        ref_s1.assign(sc.nextLine());
 
         System.out.print("Enter the destination string: ");
-        s2.assign(sc.nextLine());
+        ref_s2.assign(sc.nextLine());
 
-        System.out.println(s2.compare_to(s1));
-        System.out.println(s2.compare_to_ignore_case(s1));
+        System.out.println(ref_s2.compare_to(ref_s1));
+        System.out.println(ref_s2.compare_to_ignore_case(ref_s1));
 
         System.out.println("-------------------------------------------------");
     }
