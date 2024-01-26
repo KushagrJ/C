@@ -212,13 +212,13 @@ int rand_int(int min, int max)
 // position of the pivot can't be predicted.
 // Thus, the first inner call to quick_sort() is
 // quick_sort(arr, lower_index, partitioning_index), instead of
-// quick_sort(arr, lower_index, (partitioning_index - 1)).
+// quick_sort(arr, lower_index, partitioning_index - 1).
 
 // At first glance, it may seem that
 //
 //  ...
-//  int i = (lower_index - 1);
-//  int j = (upper_index + 1);
+//  int i = lower_index - 1;
+//  int j = upper_index + 1;
 //
 //  while (true)
 //  {
