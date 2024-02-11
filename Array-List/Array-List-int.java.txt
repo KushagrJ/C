@@ -237,7 +237,7 @@ class Hello
 {
     public static void main(String[] args)
     {
-        // ref_a1 is a reference to the object handler.
+        // ref_a1 is the name of a reference to the object handler.
         Array_List_int ref_a1 = new Array_List_int();
         // ref_a1.create_empty_Array_List_int();
 
