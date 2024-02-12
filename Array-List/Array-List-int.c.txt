@@ -463,3 +463,89 @@ void destroy_Array_List_int(Array_List_int* ptr)
 {
     free(ptr->arr);
 }
+
+
+
+/*
+
+As usual, a->b is equivalent to (*a).b and x[i] is equivalent to *(x + i).
+
+malloc() allocates memory starting at an address which is a multiple of the
+largest alignment requirement of the system (for eg., 16).
+
+The size of Array_List_int is 16.
+The alignment requirement of Array_List_int is 8.
+
+--------------------------------------------------------------------------------
+
+In main(), Array_List_int a1;
+
+Stack:       |-------|
+         200 |       |  Name 1 - a1.arr
+             |   ?   |
+             |       |
+             |-------|
+             |       |  Name 1 - a1.size
+             |   ?   |
+             |       |
+             |-------|
+             |       |  Name 1 - a1.capacity
+             |   ?   |
+         215 |       |
+             |-------|
+
+--------------------------------------------------------------------------------
+
+In main(), create_empty_Array_List_int(&a1);
+
+Stack:       |-------|
+         600 |       |  Name 1 - ptr
+             |  200  |
+         603 |       |
+             |-------|
+
+             |-------|
+         200 |       |  Name 1 - XXXXX
+             |   ?   |  Name 2 - ptr->arr
+             |       |
+             |-------|
+             |       |  Name 1 - XXXXX
+             |   ?   |  Name 2 - ptr->size
+             |       |
+             |-------|
+             |       |  Name 1 - XXXXX
+             |   ?   |  Name 2 - ptr->capacity
+         215 |       |
+             |-------|
+
+--------------------------------------------------------------------------------
+
+In create_empty_Array_List_int(&a1), ptr->arr = malloc(sizeof (int));
+
+Stack:       |-------|
+         600 |       |  Name 1 - ptr
+             |  200  |
+         603 |       |
+             |-------|
+
+             |-------|
+         200 |       |  Name 1 - XXXXX
+             |  400  |  Name 2 - ptr->arr
+             |       |
+             |-------|
+             |       |  Name 1 - XXXXX
+             |   ?   |  Name 2 - ptr->size
+             |       |
+             |-------|
+             |       |  Name 1 - XXXXX
+             |   ?   |  Name 2 - ptr->capacity
+         215 |       |
+             |-------|
+
+Heap:        |-------|
+         400 |       |  Name 1 - ((*ptr).ar
+             |   ?   |
+         403 |       |
+             |-------|
+
+*/
