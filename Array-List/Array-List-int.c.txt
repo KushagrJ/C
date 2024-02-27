@@ -471,14 +471,15 @@ void destroy_Array_List_int(Array_List_int* ptr)
 As usual, a->b is equivalent to (*a).b and x[i] is equivalent to *(x + i).
 
 malloc() allocates memory starting at an address which is a multiple of the
-largest alignment requirement of the system (for eg., 16).
+largest alignment requirement of the system (for eg., 16) in order to satisfy
+the alignment requirement for all possible data types.
 
 The size of Array_List_int is 16.
 The alignment requirement of Array_List_int is 8.
 
 --------------------------------------------------------------------------------
 
-In main(), Array_List_int a1;
+Array_List_int a1;
 
 Stack:       |-------|
          200 |       |  Name 1 - a1.arr
@@ -496,7 +497,7 @@ Stack:       |-------|
 
 --------------------------------------------------------------------------------
 
-In main(), create_empty_Array_List_int(&a1);
+create_empty_Array_List_int(&a1);
 
 Stack:       |-------|
          600 |       |  Name 1 - ptr
@@ -520,7 +521,7 @@ Stack:       |-------|
 
 --------------------------------------------------------------------------------
 
-In create_empty_Array_List_int(&a1), ptr->arr = malloc(sizeof (int));
+ptr->arr = malloc(sizeof (int));
 
 Stack:       |-------|
          600 |       |  Name 1 - ptr
