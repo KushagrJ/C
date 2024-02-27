@@ -366,8 +366,8 @@ void Linked_List_int_add_at_index(Linked_List_int* ptr, int i, int n)
 		            ptr_current_node = ptr_current_node->ptr_next_node;
 	            }
 		    }
-
-        	else
+            
+            else
 	        {
 		        ptr_current_node = ptr->ptr_tail_node;
 
@@ -493,7 +493,7 @@ void Linked_List_int_remove(Linked_List_int* ptr, int i)
 	            }
 		    }
 
-        	else
+            else
 	        {
 		        ptr_current_node = ptr->ptr_tail_node;
 
